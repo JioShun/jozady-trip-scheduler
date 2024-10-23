@@ -4,7 +4,7 @@
             <div class="circle-number">{{ props.index }}</div> <!-- 番号 -->
             <span class="time">~08:40</span> <!-- 時間表示 -->
         </div>
-        <div class="item-content">
+        <div class="item-content" @click="openInfoWindow(props.element.place_index)">
             <img class="place-image"
                 :src="props.element.photoUrl ? props.element.photoUrl : require('@/assets/no-image.png')"
                 alt="Place Photo" />
@@ -32,6 +32,9 @@
 <script setup>
 // eslint-disable-next-line
 import { ref, defineProps, onMounted, onBeforeUnmount } from 'vue';
+import { useMarkerStore } from '@/stores/markerStore';
+
+const { openInfoWindow } = useMarkerStore();
 
 const props = defineProps({
     element: {
@@ -128,6 +131,11 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: space-between;
     position: relative;
+}
+
+.item-content:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
 }
 
 .place-image {
