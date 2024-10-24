@@ -59,15 +59,16 @@
 
         <!-- 下にカーソルを当てたらプラスボタンが出る -->
         <v-hover v-slot="{ isHovering, props }">
-            <div v-bind="props" class="add-spot-button">
+            <div v-bind="props" class="add-spot">
                 <v-btn
                     append-icon="add"
-                    density="compact"
-                    size="extra-small"
-                    block="true"
-                    variant="plain"
+                    :density="isHovering ? 'compact' : 'compact'"
+                    variant="text"
                     rounded="xl"
-                    :class="{ 'add-spot-button-hover': !isHovering }"
+                    :class="{
+                        'add-spot-button-hover': isHovering,
+                        'add-spot-button': !isHovering,
+                    }"
                 >
                     スポットを追加
                 </v-btn>
@@ -276,11 +277,21 @@ onBeforeUnmount(() => {
     color: #555;
 }
 
+.add-spot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .add-spot-button {
-    margin-bottom: 5px;
+    scale: 0.6;
+    transition: all 0.3s ease; /* サイズ変化を滑らかにする */
+    opacity: 0; /* 最初は非表示 */
+    height: 10px;
 }
 
 .add-spot-button-hover {
-    opacity: 0;
+    scale: 0.8;
+    transition: all 0.3s ease; /* ホバー時も滑らかに変化 */
 }
 </style>
