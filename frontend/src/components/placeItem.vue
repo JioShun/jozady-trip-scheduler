@@ -40,6 +40,7 @@
                     variant="text"
                     @click="toggleMenu"
                 ></v-btn>
+
                 <!-- メニュー一覧 -->
                 <v-menu activator="parent" location="start">
                     <v-list>
@@ -281,17 +282,17 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 15px;
 }
 
 .add-spot-button {
     scale: 0.6;
     transition: all 0.3s ease; /* サイズ変化を滑らかにする */
     opacity: 0; /* 最初は非表示 */
-    height: 10px;
 }
 
 .add-spot-button-hover {
-    scale: 0.8;
+    scale: 0.7;
     transition: all 0.3s ease; /* ホバー時も滑らかに変化 */
 }
 </style>

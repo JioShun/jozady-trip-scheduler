@@ -22,7 +22,7 @@ import SideBar from "./components/SideBar.vue";
 * {
     margin: 0;
     padding: 0;
-    /* border: 1px solid #ccc; */
+    border: 1px solid #ccc;
 }
 
 #app {

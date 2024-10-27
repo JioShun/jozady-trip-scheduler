@@ -43,12 +43,26 @@
                 elevation="6"
                 @click="toggleAddPlaceSidebar"
                 class="add-spot-btn"
-                >スポット</v-btn
             >
+                スポット
+            </v-btn>
         </div>
     </div>
-    <v-navigation-drawer v-model="addPlaceSidebar" location="right" absolute>
-        <AddPlaceSideBar />
+    <v-navigation-drawer
+        v-model="addPlaceSidebar"
+        location="right"
+        temporary
+        width="360"
+        :scrim="false"
+    >
+        <AddPlaceSideBar @close="toggleAddPlaceSidebar" />
+        <v-btn
+            icon="close"
+            variant="plain"
+            size="regular"
+            class="close-add-place-sidebar-button"
+            @click="toggleAddPlaceSidebar"
+        ></v-btn>
     </v-navigation-drawer>
 </template>
 
@@ -209,5 +223,12 @@ const toggleAddPlaceSidebar = () => {
     bottom: 10px;
     right: 10px;
     transition: opacity 0.3s;
+}
+
+.close-add-place-sidebar-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #333;
 }
 </style>
