@@ -6,8 +6,12 @@
                 <p>日程表</p>
             </div>
             <div class="days">
-                <button v-for="(day, index) in days" :key="index" :class="['day', { selected: index === selectedDay }]"
-                    @click="selectDay(index)">
+                <button
+                    v-for="(day, index) in days"
+                    :key="index"
+                    :class="['day', { selected: index === selectedDay }]"
+                    @click="selectDay(index)"
+                >
                     <p>{{ day.name }}</p>
                     <span>{{ day.date }}</span>
                 </button>
@@ -16,36 +20,68 @@
 
         <div class="sidebar__content">
             <VueDraggable v-model="places" :animation="200" ghostClass="ghost">
-                <div v-for="(element, index) in places" :key="element.place_index">
-                    <place-item :element="element" :removePlace="removePlace" :index="index + 1" />
+                <div
+                    v-for="(element, index) in places"
+                    :key="element.place_index"
+                >
+                    <place-item
+                        :element="element"
+                        :removePlace="removePlace"
+                        :index="index + 1"
+                    />
                 </div>
             </VueDraggable>
+            <div class="button-space"></div>
         </div>
         <div class="add_place">
-            <v-btn size="large" color="yellow-darken-4" height="40" append-icon="add" rounded="xl" elevation="8"
-                @click="toggleAddSpotSidebar" class="add-spot-btn">スポット</v-btn>
+            <v-btn
+                size="large"
+                color="yellow-darken-4"
+                height="40"
+                append-icon="add"
+                rounded="xl"
+                elevation="6"
+                @click="toggleAddPlaceSidebar"
+                class="add-spot-btn"
+            >
+                スポット
+            </v-btn>
         </div>
     </div>
-
-    <addPlaceSideBar v-if="addSpotSidebar" />
+    <v-navigation-drawer
+        v-model="addPlaceSidebar"
+        location="right"
+        temporary
+        width="360"
+        :scrim="false"
+        style="z-index: 1"
+    >
+        <AddPlaceSideBar />
+        <v-btn
+            icon="close"
+            variant="plain"
+            size="regular"
+            class="close-add-place-sidebar-button"
+            @click="toggleAddPlaceSidebar"
+        ></v-btn>
+    </v-navigation-drawer>
 </template>
-
 
 <script setup>
 // eslint-disable-next-line
-import { ref, watch, onMounted, provide, computed } from 'vue';
-import { VueDraggable } from 'vue-draggable-plus'
-import { usePlaceStore } from '@/stores/placeStore';
-import placeItem from './placeItem.vue';
-import addPlaceSideBar from './addPlaceSideBar.vue';
+import { ref, watch, onMounted, provide, computed } from "vue";
+import { VueDraggable } from "vue-draggable-plus";
+import { usePlaceStore } from "@/stores/placeStore";
+import placeItem from "./PlaceItem.vue";
+import AddPlaceSideBar from "./addPlaceSideBar.vue";
 
 const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
 
 const days = ref([
-    { name: 'Day1', date: '9/3 火' },
-    { name: 'Day2', date: '9/4 水' },
-    { name: 'Day3', date: '9/5 木' }
+    { name: "Day1", date: "9/3 火" },
+    { name: "Day2", date: "9/4 水" },
+    { name: "Day3", date: "9/5 木" },
 ]);
 
 const selectedDay = ref(0); // 初期選択された日付（インデックス0が選択された状態）
@@ -55,15 +91,12 @@ const selectDay = (index) => {
     selectedDay.value = index;
 };
 
-// メインサイドバーと追加サイドバーの状態管理
-const addSpotSidebar = ref(false);
+const addPlaceSidebar = ref(true);
 
 // スポット追加サイドバーの開閉
-const toggleAddSpotSidebar = () => {
-    addSpotSidebar.value = !addSpotSidebar.value;
-}
-
-
+const toggleAddPlaceSidebar = () => {
+    addPlaceSidebar.value = !addPlaceSidebar.value;
+};
 </script>
 
 <style scoped>
@@ -75,7 +108,6 @@ const toggleAddSpotSidebar = () => {
     font-weight: bold;
     font-size: 18px;
 }
-
 
 .sidebar {
     width: 100%;
@@ -175,6 +207,33 @@ const toggleAddSpotSidebar = () => {
 .add_place {
     position: absolute;
     bottom: 20px;
-    transform: translateX(80%);
+    transform: translateX(75%);
+}
+
+.button-space {
+    height: 40px;
+}
+
+.hover-area {
+    width: 200px;
+    height: 100px;
+    background-color: #f0f0f0;
+}
+
+.hover-button {
+    bottom: 10px;
+    right: 10px;
+    transition: opacity 0.3s;
+}
+
+.close-add-place-sidebar-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: #333;
+}
+
+.drawer {
+    z-index: 1;
 }
 </style>

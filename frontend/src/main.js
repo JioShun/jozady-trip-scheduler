@@ -4,13 +4,19 @@ import App from './App.vue'
 import { usePlaceStore } from './stores/placeStore'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
+import { loadGoogleApi } from './plugins/loadGoogleApi'
 
 const pinia = createPinia()
 const app = createApp(App)
+const apiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
 
-loadFonts()
+async function main() {
+    loadFonts()
+    await loadGoogleApi(apiKey)
+    app.use(pinia);
+    app.use(vuetify);
+    await usePlaceStore().fetchPlaces();
+    app.mount('#app');
+}
 
-app.use(pinia);
-await usePlaceStore().fetchPlaces();
-app.use(vuetify);
-app.mount('#app');
+main()

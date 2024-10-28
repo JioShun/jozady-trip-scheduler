@@ -1,38 +1,87 @@
 <template>
     <div class="place-item">
+        <!-- ヘッダー（番号・時間） -->
         <div class="item-header">
-            <div class="circle-number">{{ props.index }}</div> <!-- 番号 -->
-            <span class="time">~08:40</span> <!-- 時間表示 -->
+            <div class="circle-number">{{ props.index }}</div>
+            <span class="time">~08:40</span>
         </div>
-        <div class="item-content" @click="openInfoWindow(props.element.place_index)">
-            <img class="place-image"
-                :src="props.element.photoUrl ? props.element.photoUrl : require('@/assets/no-image.png')"
-                alt="Place Photo" />
+
+        <!-- スポット情報（写真・名前・メニューバー） -->
+        <div
+            class="item-content"
+            @click="openInfoWindow(props.element.place_index)"
+        >
+            <!-- 写真 -->
+            <img
+                class="place-image"
+                :src="
+                    props.element.photoUrl
+                        ? props.element.photoUrl
+                        : require('@/assets/no-image.png')
+                "
+                alt="Place Photo"
+            />
+
+            <!-- 名前・住所 -->
             <div class="place-info">
                 <strong class="place-title">{{ props.element.name }}</strong>
                 <div class="place-details">
                     <p>{{ props.element.formatted_address }}</p>
                 </div>
             </div>
-            <!-- <button class="remove-button" @click="removePlace(props.element.place_index)"><strong>⋮</strong></button> -->
+
+            <!-- メニュー -->
             <div class="schedule-item" ref="menuContainer">
-                <v-btn density="compact" size="auto" icon="more_vert" variant="text" @click="toggleMenu"></v-btn>
+                <!-- メニューボタン -->
+                <v-btn
+                    density="compact"
+                    size="auto"
+                    icon="more_vert"
+                    variant="text"
+                    @click="toggleMenu"
+                ></v-btn>
+
+                <!-- メニュー一覧 -->
                 <v-menu activator="parent" location="start">
                     <v-list>
-                        <v-list-item v-for="(item, index) in menuItems" :key="index" @click="selectMenu(item)">
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item
+                            v-for="(item, index) in menuItems"
+                            :key="index"
+                            @click="selectMenu(item)"
+                        >
+                            <v-list-item-title>{{
+                                item.title
+                            }}</v-list-item-title>
                         </v-list-item>
                     </v-list>
                 </v-menu>
             </div>
         </div>
+
+        <!-- 下にカーソルを当てたらプラスボタンが出る -->
+        <v-hover v-slot="{ isHovering, props }">
+            <div v-bind="props" class="add-spot">
+                <v-btn
+                    append-icon="add"
+                    :density="isHovering ? 'compact' : 'compact'"
+                    variant="text"
+                    rounded="xl"
+                    :class="{
+                        'add-spot-button-hover': isHovering,
+                        'add-spot-button': !isHovering,
+                    }"
+                >
+                    スポットを追加
+                </v-btn>
+            </div>
+        </v-hover>
     </div>
 </template>
 
 <script setup>
 // eslint-disable-next-line
-import { ref, defineProps, onMounted, onBeforeUnmount } from 'vue';
-import { useMarkerStore } from '@/stores/markerStore';
+import { ref, defineProps, onMounted, onBeforeUnmount } from "vue";
+import { useMarkerStore } from "@/stores/markerStore";
 
 const { openInfoWindow } = useMarkerStore();
 
@@ -87,8 +136,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
     document.removeEventListener("click", handleClickOutside);
 });
-
-
 </script>
 
 <style scoped>
@@ -125,7 +172,7 @@ onBeforeUnmount(() => {
     padding: 7px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     background-color: #f9f9f9;
     display: flex;
     align-items: center;
@@ -229,5 +276,23 @@ onBeforeUnmount(() => {
 .menu-button:hover {
     background-color: #e0e0e0;
     color: #555;
+}
+
+.add-spot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15px;
+}
+
+.add-spot-button {
+    scale: 0.6;
+    transition: all 0.3s ease; /* サイズ変化を滑らかにする */
+    opacity: 0; /* 最初は非表示 */
+}
+
+.add-spot-button-hover {
+    scale: 0.7;
+    transition: all 0.3s ease; /* ホバー時も滑らかに変化 */
 }
 </style>
