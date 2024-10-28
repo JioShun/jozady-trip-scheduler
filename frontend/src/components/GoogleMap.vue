@@ -5,7 +5,7 @@
         id="autocomplete"
         prepend-inner-icon="search"
         dense
-    ></v-text-field>3
+    ></v-text-field>
     <div id="map"></div>
 </template>
 
