@@ -1,117 +1,111 @@
 <template>
-    <div class="add-place-sidebar" :class="{ 'slide-in': isVisible, 'slide-out': !isVisible }">
+    <div class="sidebar">
         <div class="sidebar-header">
-            <h2>スポットを検索</h2>
-            <button @click="closeSidebar" class="close-btn">×</button>
+            <div class="header-item">
+                <h2><strong>スポットを追加</strong></h2>
+            </div>
         </div>
 
         <div class="sidebar-content">
-            <v-text-field v-model="searchQuery" label="スポット名を入力" solo></v-text-field>
+            <!-- どこから選ぶかボタン -->
+            <v-btn-toggle
+                rounded="0"
+                mandatory
+                class="add-spot-option"
+                density="comfortable"
+            >
+                <v-btn class="button-option"> 地図から追加 </v-btn>
+                <v-btn class="button-option"> リストから追加 </v-btn>
+            </v-btn-toggle>
 
-            <!-- 検索結果リスト -->
-            <v-list dense>
-                <v-list-item v-for="(spot, index) in filteredSpots" :key="index" @click="selectSpot(spot)">
-                    <v-list-item-content>
-                        <v-list-item-title>{{ spot }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </div>
-
-        <div class="sidebar-footer">
-            <v-btn color="success" @click="saveSpot">スポットを保存</v-btn>
+            <!-- スポット追加のための入力フォーム -->
+            <div class="sidebar-form">
+                <!-- 検索バー -->
+                <div class="search-spot">
+                    <v-text-field
+                        append-inner-icon="search"
+                        id="a"
+                        variant="outlined"
+                        clearable
+                        dense
+                    ></v-text-field>
+                </div>
+                <!-- 日付の選択 -->
+                <div class="date">
+                    <input type="date" />
+                </div>
+                <!-- 時間選択 -->
+                <div class="time">
+                    <input type="time" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-// eslint-disable-next-line
-import { ref, watch, computed } from 'vue';
+import { onMounted } from "vue";
+/* global google */
 
-// サイドバーの表示・非表示を管理
-const isVisible = ref(true);
+onMounted(() => {
+    const input_a = document.getElementById("a");
+    const autocomplete_a = new google.maps.places.Autocomplete(input_a);
 
-// スポットのリストと検索クエリ
-const spots = ref(['函館空港', '五稜郭公園', '立待岬']);
-const searchQuery = ref('');
+    // 選択された場所に基づいて地図の中心を更新
+    autocomplete_a.addListener("place_changed", () => {
+        const place = autocomplete_a.getPlace();
 
-// フィルタされたスポット
-const filteredSpots = computed(() => {
-    return spots.value.filter(spot => spot.includes(searchQuery.value));
+        if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+        }
+
+        console.log("Place selected:", place.name);
+    });
 });
-
-// 閉じる機能
-const closeSidebar = () => {
-    isVisible.value = false;
-};
-
-// スポットを保存する機能
-const saveSpot = () => {
-    alert('新しいスポットが保存されました');
-    closeSidebar();
-};
-
-// スポットを選択する機能（仮）
-const selectSpot = (spot) => {
-    alert(`${spot} が選択されました`);
-};
 </script>
 
 <style scoped>
-.add-place-sidebar {
-    position: fixed;
-    top: 0;
-    right: -300px;
-    /* 初期位置は画面外 */
-    width: 300px;
-    height: 100vh;
+.sidebar {
+    width: 100%;
+    height: 100%;
     background-color: #f4f4f9;
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
     display: flex;
     flex-direction: column;
-    z-index: 1000;
-}
-
-.slide-in {
-    right: 0;
-    /* 表示時は画面内にスライド */
-}
-
-.slide-out {
-    right: -300px;
-    /* 非表示時は画面外 */
 }
 
 .sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
+    padding: 10px;
     background-color: #ffed9d;
-}
-
-.sidebar-header h2 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.close-btn {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-content {
-    padding: 20px;
-    flex: 1;
-    overflow-y: auto;
+    height: 100%;
+    background-color: #ffffff;
 }
 
-.sidebar-footer {
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+.add-spot-option {
+    display: flex;
+    width: 100%;
+}
+
+.button-option {
+    flex: 1; /* ボタンが均等に伸びる */
+}
+
+.sidebar-form {
+    padding: 10px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+}
+
+.sidebar-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
 }
 </style>
