@@ -73,7 +73,7 @@ import { ref, watch, onMounted, provide, computed } from "vue";
 import { VueDraggable } from "vue-draggable-plus";
 import { usePlaceStore } from "@/stores/placeStore";
 import placeItem from "./PlaceItem.vue";
-import AddPlaceSideBar from "./AddPlaceSideBar.vue";
+import AddPlaceSideBar from "./addPlaceSideBar.vue";
 
 const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
