@@ -1,29 +1,39 @@
 <template>
     <div class="sidebar">
-        <div class="sidebar__header">
+        <div class="sidebar-header">
             <div class="header-item">
                 <h2><strong>スポットを追加</strong></h2>
             </div>
         </div>
 
-        <div class="sidebar__content">
+        <div class="sidebar-content">
             <!-- どこから選ぶかボタン -->
-            <div class="add-spot-option">
+            <v-btn-toggle
+                rounded="0"
+                mandatory
+                class="add-spot-option"
+                density="comfortable"
+            >
                 <v-btn class="button-option"> 地図から追加 </v-btn>
                 <v-btn class="button-option"> リストから追加 </v-btn>
-            </div>
+            </v-btn-toggle>
 
             <!-- スポット追加のための入力フォーム -->
             <div class="sidebar-form">
                 <!-- 検索バー -->
                 <div class="search-spot">
                     <v-text-field
-                        prepend-inner-icon="search"
+                        append-inner-icon="search"
+                        id="a"
+                        variant="outlined"
+                        clearable
                         dense
-                        placeholder="スポット名を入力"
                     ></v-text-field>
                 </div>
-
+                <!-- 日付の選択 -->
+                <div class="date">
+                    <input type="date" />
+                </div>
                 <!-- 時間選択 -->
                 <div class="time">
                     <input type="time" />
@@ -33,7 +43,27 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from "vue";
+/* global google */
+
+onMounted(() => {
+    const input_a = document.getElementById("a");
+    const autocomplete_a = new google.maps.places.Autocomplete(input_a);
+
+    // 選択された場所に基づいて地図の中心を更新
+    autocomplete_a.addListener("place_changed", () => {
+        const place = autocomplete_a.getPlace();
+
+        if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+        }
+
+        console.log("Place selected:", place.name);
+    });
+});
+</script>
 
 <style scoped>
 .sidebar {
@@ -44,10 +74,15 @@
     flex-direction: column;
 }
 
-.sidebar__header {
+.sidebar-header {
     padding: 10px;
     background-color: #ffed9d;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-content {
+    height: 100%;
+    background-color: #ffffff;
 }
 
 .add-spot-option {
@@ -71,13 +106,6 @@
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #ffed9d;
-}
-
-.search-spot {
-}
-
-.time {
+    margin-bottom: 20px;
 }
 </style>
