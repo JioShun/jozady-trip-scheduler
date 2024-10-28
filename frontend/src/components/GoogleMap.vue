@@ -18,33 +18,19 @@ import { useMarkerStore } from "@/stores/markerStore";
 const { handlePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
 const { addMarker } = useMarkerStore();
-const apiKey = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
-let AdvancedMarkerElement;
-let map;
+
 let autocomplete;
 let firstPosition = [41.791, 140.7677]; // 最初に表示するマップの中心
 
-// マップを読み込むメソッド
-const loadMap = async () => {
-    if (typeof google === "undefined") {
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`; // 修正点
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-        await new Promise((resolve) => (script.onload = resolve));
-    }
-    AdvancedMarkerElement = (await google.maps.importLibrary("marker"))
-        .AdvancedMarkerElement;
-};
-
 // マップを初期化するメソッド
-const initMap = async () => {
+const initMap = async (map) => {
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: firstPosition[0], lng: firstPosition[1] },
         zoom: 12,
         mapId: "688bfeaf04260b89",
     });
+
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
     // マーカーを追加
     places.value.forEach((place) => {
@@ -88,7 +74,6 @@ const initMap = async () => {
 };
 
 onMounted(async () => {
-    await loadMap();
     initMap();
 });
 </script>

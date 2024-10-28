@@ -54,8 +54,9 @@
         temporary
         width="360"
         :scrim="false"
+        style="z-index: 1"
     >
-        <AddPlaceSideBar @close="toggleAddPlaceSidebar" />
+        <AddPlaceSideBar />
         <v-btn
             icon="close"
             variant="plain"
@@ -90,7 +91,7 @@ const selectDay = (index) => {
     selectedDay.value = index;
 };
 
-const addPlaceSidebar = ref(false);
+const addPlaceSidebar = ref(true);
 
 // スポット追加サイドバーの開閉
 const toggleAddPlaceSidebar = () => {
@@ -230,5 +231,9 @@ const toggleAddPlaceSidebar = () => {
     top: 15px;
     right: 20px;
     color: #333;
+}
+
+.drawer {
+    z-index: 1;
 }
 </style>
