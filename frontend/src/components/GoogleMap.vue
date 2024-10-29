@@ -1,6 +1,5 @@
 <template>
     <v-text-field
-        v-model="searchText"
         variant="solo"
         id="autocomplete"
         prepend-inner-icon="search"

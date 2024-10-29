@@ -3,9 +3,7 @@
         <!-- ヘッダー -->
         <div class="sidebar-header">
             <!-- タイトル -->
-            <div class="header-item">
-                <h2>スポットを追加</h2>
-            </div>
+            <h2>スポットを追加</h2>
         </div>
 
         <!-- どこから選ぶかボタン -->
@@ -14,102 +12,112 @@
             fixed-tabs
             align-tabs="center"
             density="comfortable"
+            bg-color="#fff"
         >
             <v-tab>地図から追加</v-tab>
             <v-tab>リストから追加</v-tab>
         </v-tabs>
 
-        <v-tabs-window v-model="selected">
-            <!-- 地図から追加のタブ内容 -->
+        <!-- コンテンツ -->
+        <v-tabs-window v-model="selected" class="all-content">
+            <!-- 地図から追加 -->
             <v-tabs-window-item class="sidebar-content">
-                <!-- スポット追加のための入力フォーム -->
                 <div class="sidebar-form">
                     <!-- 検索バー -->
                     <div class="search-spot">
                         <v-text-field
                             append-inner-icon="search"
                             id="search"
-                            variant="outlined"
                             clearable
-                            dense
+                            placeholder=""
+                            label="スポットを検索"
+                            variant="outlined"
+                            rounded="xl"
                         ></v-text-field>
                     </div>
 
                     <!-- 日付の選択 -->
-                    <div class="date-selector">
+                    <!-- <div class="date-selector">
                         <v-slide-group
-                            v-model="selectedDate"
                             show-arrows
+                            mandatory
+                            center-active
+                            v-model="selectedDate"
                             class="date-slide-group"
                         >
-                            <v-slide-item
-                                v-for="(day, index) in dateOptions"
-                                :key="index"
-                                :value="day.date"
+                            <v-slide-group-item
+                                v-for="date in dateOptions"
+                                :key="date"
+                                v-slot="{ isSelected, toggle }"
                             >
-                                <v-card
-                                    :class="{
-                                        'selected-date':
-                                            selectedDate === day.date,
-                                    }"
-                                    class="date-card"
-                                    @click="selectDate(day.date)"
-                                    flat
+                                <v-btn
+                                    :color="isSelected ? '#ffed9d' : undefined"
+                                    class="date-btn"
+                                    rounded
+                                    @click="toggle"
                                 >
-                                    <v-card-text class="text-center">
-                                        <div class="day-label">
-                                            {{ day.label }}
-                                        </div>
-                                        <div class="day-date">
-                                            {{ day.displayDate }}
-                                        </div>
-                                    </v-card-text>
-                                </v-card>
-                            </v-slide-item>
+                                    {{ date.displayDate }}
+                                </v-btn>
+                            </v-slide-group-item>
                         </v-slide-group>
+                    </div> -->
+                    <v-select
+                        :items="dateOptions"
+                        item-title="displayDate"
+                        item-value="displayDate"
+                        label="日付を選択"
+                        v-model="selectedDate"
+                        variant="outlined"
+                        rounded="xl"
+                        class="date-selector"
+                    >
+                    </v-select>
+
+                    <!-- 時間の選択 -->
+                    <div class="time">
+                        <v-text-field
+                            append-inner-icon="schedule"
+                            clearable
+                            dense
+                            type="time"
+                            variant="outlined"
+                            rounded="xl"
+                        ></v-text-field>
                     </div>
+                </div>
+                <div class="add-spot-btn">
+                    <v-btn
+                        size="large"
+                        color="yellow-darken-1"
+                        height="40"
+                        rounded="xl"
+                        elevation="6"
+                    >
+                        追加
+                    </v-btn>
                 </div>
             </v-tabs-window-item>
 
-            <!-- リストから追加のタブ内容 -->
+            <!-- リストから追加 -->
             <v-tabs-window-item class="sidebar-content">
-                <v-list>
-                    <v-list-item-group>
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-list-item-title>スポット1</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-list-item-title>スポット2</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-list-item-content>
-                                <v-list-item-title>スポット3</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-item-group>
-                </v-list>
+                <p>何もなし</p>
             </v-tabs-window-item>
         </v-tabs-window>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 /* global google */
 
 const selected = ref(0);
 const selectedDate = ref(null);
+
 const dateOptions = [
     { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
     { label: "Day2", date: "2024-09-04", displayDate: "9/4 水" },
     { label: "Day3", date: "2024-09-05", displayDate: "9/5 木" },
-    { label: "Day3", date: "2024-09-05", displayDate: "9/5 木" },
-    { label: "Day3", date: "2024-09-05", displayDate: "9/5 木" },
-    // 必要に応じて他の日付も追加
+    { label: "Day4", date: "2024-09-06", displayDate: "9/6 金" },
 ];
 
 const searchBox = () => {
@@ -129,7 +137,8 @@ const searchBox = () => {
     });
 };
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick(); // レンダリング後に実行
     searchBox();
 });
 </script>
@@ -137,8 +146,7 @@ onMounted(() => {
 <style scoped>
 .sidebar {
     width: 100%;
-    height: 100%;
-    background-color: #f4f4f9;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
@@ -148,58 +156,45 @@ onMounted(() => {
     padding: 20px;
     background-color: #ffed9d;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.header-item {
-    display: flex;
-    align-items: flex-end;
-}
-
-.header-item h2 {
-    font-size: 30px;
     font-weight: bold;
 }
 
-.sidebar-content {
-    padding: 20px;
+.all-content {
+    flex: 1;
     height: 100%;
     background-color: #fff;
 }
 
-.date-selector {
-    background-color: #fff7cc;
-    padding: 20px;
-}
-
-.date-slide-group {
+.sidebar-content {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    padding: 30px;
+    height: 100%;
 }
 
-.date-card {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    background-color: #f5f5f5;
+.sidebar-form {
+    flex: 1;
 }
 
-.selected-date {
-    background-color: #f4a261; /* 選択時の色 */
-    color: #ffffff;
+.date-btn {
+    margin: 5px;
 }
 
-.day-label {
-    font-size: 18px;
-    font-weight: bold;
+/* 矢印ボタンの幅を強制的に小さく */
+.v-slide-group__prev,
+.v-slide-group__next {
+    min-width: 0 !important;
 }
 
-.day-date {
-    font-size: 14px;
-    color: #666666;
+.search-spot,
+.date-selector,
+.time {
+    margin-bottom: 20px;
+}
+
+.add-spot-btn {
+    text-align: end;
+    justify-content: flex-end;
 }
 </style>
