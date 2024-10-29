@@ -84,6 +84,15 @@
                             rounded="xl"
                         ></v-text-field>
                     </div>
+                    <div class="memo">
+                        <v-textarea
+                            label="メモ"
+                            variant="outlined"
+                            rounded="lg"
+                            rows="3"
+                            append-inner-icon="edit_note"
+                        ></v-textarea>
+                    </div>
                 </div>
                 <div class="add-spot-btn">
                     <v-btn
