@@ -14,14 +14,31 @@ const getPlaceInfo = async (placeId) => {
             language: 'ja',
         },
     });
+    // console.log(response.data.result);
     return response.data.result;
 };
 
 // プレース情報をデータベースに保存する関数
 const postPlace = async (placeInfo) => {
     return new Promise((resolve, reject) => {
-        const query = 'INSERT INTO Place (name, formatted_address, location, place_id, memo, types) VALUES (?, ?, ?, ?, ?, ?)';
-        con.query(query, placeInfo, (err, result) => {
+        const query = `
+            INSERT INTO Place (name, formatted_address, location, place_id, memo, types, datetime, photo_reference) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        // 必要なデータを配列に展開
+        const values = [
+            placeInfo.name,
+            placeInfo.formatted_address,
+            JSON.stringify(placeInfo.location), // locationをJSON文字列として保存
+            placeInfo.place_id,
+            placeInfo.memo,
+            JSON.stringify(placeInfo.types),    // typesをJSON文字列として保存
+            placeInfo.datetime,
+            placeInfo.photo_reference
+        ];
+
+        con.query(query, values, (err, result) => {
             if (err) {
                 console.error('Error inserting into Place:', err);
                 return reject('Failed to save place data');
@@ -30,6 +47,7 @@ const postPlace = async (placeInfo) => {
         });
     });
 };
+
 
 const getPlacePhotoUrl = async (placeInfo) => {
     const { photos } = placeInfo;
@@ -108,7 +126,7 @@ router.post('/getPlaceInfo', async (req, res) => {
 
 // getPlaceInfoとpostPlacesを組み合わせる
 router.post('/handlePlace', async (req, res) => {
-    const { placeId } = req.body;
+    const { placeId } = req.body; // リクエストボディからplaceIdを取得
     try {
         const placeInfo = await getPlaceInfo(placeId); // placeIdからplace情報を取得
 
@@ -116,7 +134,8 @@ router.post('/handlePlace', async (req, res) => {
         const { name, formatted_address, geometry, place_id, memo, types } = placeInfo;
         const location = JSON.stringify(geometry.location); // locationをJSON形式に変換
         const newTypes = JSON.stringify(types); // typesをJSON形式に変換
-        const newPlaceInfo = [name, formatted_address, location, place_id, memo, newTypes]; // place情報を作成
+        const datetime = null; // datetimeはnullで保存
+        const newPlaceInfo = [name, formatted_address, location, place_id, memo, newTypes, datetime]; // place情報を作成
         await postPlace(newPlaceInfo); // データベースに新しいplaceを保存
         con.query('SELECT * FROM Place ORDER BY place_index DESC LIMIT 1', async (err, result) => { // 最新のplaceを取得
             if (err) throw err;
@@ -124,6 +143,35 @@ router.post('/handlePlace', async (req, res) => {
             res.json(result[0]); // 最新のplaceを返す
         });
 
+    } catch (error) {
+        console.error('Error handling place:', error);
+        res.status(500).send('Error handling place');
+    }
+});
+
+router.post('/addPlace', async (req, res) => {
+    const placeData = req.body;
+    console.log('placeData:', placeData);
+    try {
+        const response = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
+            params: {
+                place_id: placeData.place_id,
+                fields: 'photos',
+                key: MAP_API_KEY,
+                language: 'ja',
+            },
+        });
+        const photoReference = response.data.result.photos[0].photo_reference;
+        placeData.photoReference = photoReference;
+        const insertId = await postPlace(placeData);
+        con.query('SELECT * FROM Place WHERE place_index = ?', [insertId], async (err, result) => {
+            if (err) {
+                console.error('Error retrieving inserted place:', err);
+                return res.status(500).send('Failed to retrieve inserted place data');
+            }
+            result[0].photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${MAP_API_KEY}`
+            res.json(result[0]);
+        });
     } catch (error) {
         console.error('Error handling place:', error);
         res.status(500).send('Error handling place');

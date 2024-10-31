@@ -26,6 +26,7 @@
                     <!-- 検索バー -->
                     <div class="search-spot">
                         <v-text-field
+                            v-model="placeData.name"
                             append-inner-icon="search"
                             id="search"
                             clearable
@@ -64,7 +65,7 @@
                     <v-select
                         :items="dateOptions"
                         item-title="displayDate"
-                        item-value="displayDate"
+                        item-value="date"
                         label="日付を選択"
                         v-model="selectedDate"
                         variant="outlined"
@@ -76,6 +77,7 @@
                     <!-- 時間の選択 -->
                     <div class="time">
                         <v-text-field
+                            v-model="time"
                             append-inner-icon="schedule"
                             clearable
                             dense
@@ -86,6 +88,7 @@
                     </div>
                     <div class="memo">
                         <v-textarea
+                            v-model="memo"
                             label="メモ"
                             variant="outlined"
                             rounded="lg"
@@ -101,6 +104,7 @@
                         height="40"
                         rounded="xl"
                         elevation="6"
+                        @click="addPlaceData"
                     >
                         追加
                     </v-btn>
@@ -117,10 +121,15 @@
 
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
+import { usePlaceStore } from "@/stores/placeStore";
 /* global google */
 
-const selected = ref(0);
-const selectedDate = ref(null);
+const { savePlace } = usePlaceStore();
+const selected = ref(0); // 0: 地図から追加, 1: リストから追加
+const selectedDate = ref(null); // 日付
+const time = ref(""); // 時間
+const memo = ref(""); // メモ
+const placeData = ref({}); // 追加するスポットの情報
 
 const dateOptions = [
     { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
@@ -131,7 +140,10 @@ const dateOptions = [
 
 const searchBox = () => {
     const input = document.getElementById("search");
-    const autocomplete = new google.maps.places.Autocomplete(input);
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ["establishment"], // 場所の名前や施設名を優先
+        fields: ["place_id", "name", "formatted_address", "geometry", "types"], // 必要なフィールドを指定
+    });
 
     // 選択された場所に基づいて地図の中心を更新
     autocomplete.addListener("place_changed", () => {
@@ -142,8 +154,31 @@ const searchBox = () => {
             return;
         }
 
-        console.log("Place selected:", place.name);
+        // placeDataオブジェクトを更新して整形
+        placeData.value = {
+            place_id: place.place_id,
+            name: place.name,
+            formatted_address: place.formatted_address,
+            location: place.geometry.location,
+            types: place.types,
+            // photos: place.photos[0],
+        };
     });
+};
+
+const addPlaceData = () => {
+    placeData.value.memo = memo.value;
+    placeData.value.datetime = `${selectedDate.value} ${time.value}:00`;
+
+    // データを保存
+    savePlace(placeData.value);
+    //console.log(placeData.value);
+
+    // データをリセット
+    placeData.value = {};
+    selectedDate.value = null;
+    time.value = "";
+    memo.value = "";
 };
 
 onMounted(async () => {
@@ -178,7 +213,7 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 30px;
+    padding: 40px;
     height: 100%;
 }
 

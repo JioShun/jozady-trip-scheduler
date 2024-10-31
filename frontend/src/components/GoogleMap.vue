@@ -61,14 +61,14 @@ const initMap = async (map) => {
     });
 
     map.addListener("click", async (event) => {
-        if (event.placeId) {
-            await handlePlace(event.placeId);
-            addMarker(
-                places.value[places.value.length - 1],
-                map,
-                AdvancedMarkerElement
-            );
-        }
+        // if (event.placeId) {
+        //     await handlePlace(event.placeId);
+        //     addMarker(
+        //         places.value[places.value.length - 1],
+        //         map,
+        //         AdvancedMarkerElement
+        //     );
+        // }
     });
 };
 
