@@ -35,7 +35,7 @@ const postPlace = async (placeInfo) => {
             placeInfo.memo,
             JSON.stringify(placeInfo.types),    // typesをJSON文字列として保存
             placeInfo.datetime,
-            placeInfo.photo_reference
+            placeInfo.photoReference
         ];
 
         con.query(query, values, (err, result) => {
@@ -151,7 +151,6 @@ router.post('/handlePlace', async (req, res) => {
 
 router.post('/addPlace', async (req, res) => {
     const placeData = req.body;
-    console.log('placeData:', placeData);
     try {
         const response = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
             params: {

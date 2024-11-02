@@ -101,7 +101,7 @@ const selectDay = (index) => {
     selectedDay.value = index;
 };
 
-const addPlaceSidebar = ref(true);
+const addPlaceSidebar = ref(false);
 
 // スポット追加サイドバーの開閉
 const toggleAddPlaceSidebar = () => {

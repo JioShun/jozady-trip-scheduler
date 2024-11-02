@@ -45,7 +45,7 @@
                             placeholder=""
                             label="スポットを検索"
                             variant="solo"
-                            rounded="xl"
+                            rounded="lg"
                             :rules="[required]"
                         ></v-text-field>
                     </div>
@@ -84,7 +84,7 @@
                         label="日付を選択"
                         v-model="selectedDate"
                         variant="solo"
-                        rounded="xl"
+                        rounded="lg"
                         class="date-selector"
                         :rules="[required]"
                     >
@@ -100,7 +100,7 @@
                             label="時間を選択"
                             type="time"
                             variant="solo"
-                            rounded="xl"
+                            rounded="lg"
                             :rules="[required]"
                         ></v-text-field>
                     </div>
@@ -121,7 +121,7 @@
                             size="x-large"
                             color="yellow-darken-3"
                             height="40"
-                            rounded="xl"
+                            rounded="lg"
                             elevation="6"
                             :disabled="!form"
                             block
@@ -277,9 +277,12 @@ onMounted(async () => {
 }
 
 .search-spot,
-.date-selector,
-.time {
+.date-selector {
     margin-bottom: 20px;
+}
+
+.time {
+    margin-bottom: 40px;
 }
 
 .add-spot-btn {
