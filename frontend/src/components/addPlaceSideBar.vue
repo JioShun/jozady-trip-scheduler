@@ -13,6 +13,7 @@
             align-tabs="center"
             density="comfortable"
             bg-color="#fff"
+            class="sidebar-tabs"
         >
             <v-tab>地図から追加</v-tab>
             <v-tab>リストから追加</v-tab>
@@ -22,7 +23,18 @@
         <v-tabs-window v-model="selected" class="all-content">
             <!-- 地図から追加 -->
             <v-tabs-window-item class="sidebar-content">
-                <div class="sidebar-form">
+                <v-form
+                    :key="key"
+                    ref="reset"
+                    v-model="form"
+                    @submit.prevent="
+                        () => {
+                            addPlaceData();
+                            toggleAddPlaceSidebar();
+                        }
+                    "
+                    class="sidebar-form"
+                >
                     <!-- 検索バー -->
                     <div class="search-spot">
                         <v-text-field
@@ -32,8 +44,9 @@
                             clearable
                             placeholder=""
                             label="スポットを検索"
-                            variant="outlined"
+                            variant="solo"
                             rounded="xl"
+                            :rules="[required]"
                         ></v-text-field>
                     </div>
 
@@ -62,53 +75,61 @@
                             </v-slide-group-item>
                         </v-slide-group>
                     </div> -->
+
+                    <!-- 日付選択 -->
                     <v-select
                         :items="dateOptions"
                         item-title="displayDate"
                         item-value="date"
                         label="日付を選択"
                         v-model="selectedDate"
-                        variant="outlined"
+                        variant="solo"
                         rounded="xl"
                         class="date-selector"
+                        :rules="[required]"
                     >
                     </v-select>
 
-                    <!-- 時間の選択 -->
+                    <!-- 時間選択 -->
                     <div class="time">
                         <v-text-field
                             v-model="time"
                             append-inner-icon="schedule"
                             clearable
                             dense
+                            label="時間を選択"
                             type="time"
-                            variant="outlined"
+                            variant="solo"
                             rounded="xl"
+                            :rules="[required]"
                         ></v-text-field>
                     </div>
                     <div class="memo">
                         <v-textarea
                             v-model="memo"
                             label="メモ"
-                            variant="outlined"
+                            variant="solo"
                             rounded="lg"
-                            rows="3"
+                            rows="4"
                             append-inner-icon="edit_note"
                         ></v-textarea>
                     </div>
-                </div>
-                <div class="add-spot-btn">
-                    <v-btn
-                        size="large"
-                        color="yellow-darken-1"
-                        height="40"
-                        rounded="xl"
-                        elevation="6"
-                        @click="addPlaceData"
-                    >
-                        追加
-                    </v-btn>
-                </div>
+
+                    <div class="add-spot-btn">
+                        <v-btn
+                            type="submit"
+                            size="x-large"
+                            color="yellow-darken-3"
+                            height="40"
+                            rounded="xl"
+                            elevation="6"
+                            :disabled="!form"
+                            block
+                        >
+                            追加
+                        </v-btn>
+                    </div>
+                </v-form>
             </v-tabs-window-item>
 
             <!-- リストから追加 -->
@@ -120,7 +141,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, defineEmits } from "vue";
 import { usePlaceStore } from "@/stores/placeStore";
 /* global google */
 
@@ -130,6 +151,16 @@ const selectedDate = ref(null); // 日付
 const time = ref(""); // 時間
 const memo = ref(""); // メモ
 const placeData = ref({}); // 追加するスポットの情報
+
+const emit = defineEmits(["toggleAddPlaceSidebar"]);
+const toggleAddPlaceSidebar = () => {
+    emit("toggleAddPlaceSidebar");
+};
+
+const key = ref(0);
+const reset = ref(null);
+const form = ref(false);
+const required = (v) => !!v || "必須";
 
 const dateOptions = [
     { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
@@ -179,6 +210,13 @@ const addPlaceData = () => {
     selectedDate.value = null;
     time.value = "";
     memo.value = "";
+
+    // フォームをリセット
+    reset.value.reset();
+    reset.value.resetValidation();
+
+    // フォームのkeyを変更して再描画
+    key.value += 1; //timeの必須だけリセットされないのでkeyを変更して無理やり再描画
 };
 
 onMounted(async () => {
@@ -190,7 +228,7 @@ onMounted(async () => {
 <style scoped>
 .sidebar {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
@@ -199,26 +237,33 @@ onMounted(async () => {
 .sidebar-header {
     padding: 20px;
     background-color: #ffed9d;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-weight: bold;
 }
 
+.sidebar-tabs {
+    box-shadow: 0px 5px 10px -6px rgba(0, 0, 0, 0.2);
+}
+
 .all-content {
-    flex: 1;
     height: 100%;
-    background-color: #fff;
+    flex: 1;
 }
 
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    flex: 1;
     padding: 40px;
     height: 100%;
 }
 
 .sidebar-form {
-    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-form > * {
+    flex: none; /* 各要素が余分なスペースを埋めないように設定 */
 }
 
 .date-btn {
@@ -238,7 +283,7 @@ onMounted(async () => {
 }
 
 .add-spot-btn {
-    text-align: end;
-    justify-content: flex-end;
+    margin-top: auto;
+    margin-left: auto;
 }
 </style>

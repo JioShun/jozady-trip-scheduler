@@ -66,7 +66,7 @@
         :scrim="false"
         style="z-index: 1"
     >
-        <AddPlaceSideBar />
+        <AddPlaceSideBar @toggleAddPlaceSidebar="toggleAddPlaceSidebar" />
         <v-btn
             icon="close"
             variant="plain"
