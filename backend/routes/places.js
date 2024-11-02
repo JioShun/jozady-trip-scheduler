@@ -26,6 +26,7 @@ const postPlace = async (placeInfo) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
+        console.log(placeInfo);
         // 必要なデータを配列に展開
         const values = [
             placeInfo.name,
@@ -67,14 +68,8 @@ router.get('/', async (req, res) => {
 
             // すべてのplaceに対してphotoUrlを取得し、Promise.allで並列処理
             await Promise.all(result.map(async (place) => {
-                const response = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', {
-                    params: {
-                        place_id: place.place_id,
-                        fields: 'photos',
-                        key: MAP_API_KEY,
-                    },
-                });
-                place.photoUrl = await getPlacePhotoUrl(response.data.result);
+                place.datetime = place.datetime.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }); // datetimeを文字列に変換
+                place.photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photo_reference}&key=${MAP_API_KEY}`
             }));
 
             // すべてのphotoUrlが追加された後で結果を返す
