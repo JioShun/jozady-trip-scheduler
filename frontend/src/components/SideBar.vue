@@ -1,10 +1,14 @@
 <template>
     <div class="sidebar">
-        <div class="sidebar__header">
-            <div class="headers">
+        <!-- ヘッダー -->
+        <div class="sidebar-header">
+            <!-- タイトル -->
+            <div class="header-item">
                 <h2>Schedule</h2>
                 <p>日程表</p>
             </div>
+
+            <!-- 日付選択 -->
             <div class="days">
                 <button
                     v-for="(day, index) in days"
@@ -18,7 +22,9 @@
             </div>
         </div>
 
+        <!-- コンテンツ -->
         <div class="sidebar__content">
+            <!-- スケジュール -->
             <VueDraggable v-model="places" :animation="200" ghostClass="ghost">
                 <div
                     v-for="(element, index) in places"
@@ -33,6 +39,8 @@
             </VueDraggable>
             <div class="button-space"></div>
         </div>
+
+        <!-- スポット追加ボタン -->
         <div class="add_place">
             <v-btn
                 size="large"
@@ -48,6 +56,8 @@
             </v-btn>
         </div>
     </div>
+
+    <!-- スポット追加サイドバー -->
     <v-navigation-drawer
         v-model="addPlaceSidebar"
         location="right"
@@ -56,7 +66,7 @@
         :scrim="false"
         style="z-index: 1"
     >
-        <AddPlaceSideBar />
+        <AddPlaceSideBar @toggleAddPlaceSidebar="toggleAddPlaceSidebar" />
         <v-btn
             icon="close"
             variant="plain"
@@ -73,7 +83,7 @@ import { ref, watch, onMounted, provide, computed } from "vue";
 import { VueDraggable } from "vue-draggable-plus";
 import { usePlaceStore } from "@/stores/placeStore";
 import placeItem from "./PlaceItem.vue";
-import AddPlaceSideBar from "./addPlaceSideBar.vue";
+import AddPlaceSideBar from "./AddPlaceSideBar.vue";
 
 const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
@@ -104,11 +114,6 @@ const toggleAddPlaceSidebar = () => {
     margin-top: 20px;
 }
 
-.title {
-    font-weight: bold;
-    font-size: 18px;
-}
-
 .sidebar {
     width: 100%;
     height: 100%;
@@ -118,39 +123,28 @@ const toggleAddPlaceSidebar = () => {
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar__header {
+.sidebar-header {
     padding: 20px;
     background-color: #ffed9d;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.headers {
+.header-item {
     display: flex;
     align-items: flex-end;
     margin-bottom: 10px;
 }
 
-.headers h2 {
+.header-item h2 {
     font-size: 36px;
     font-weight: bold;
     margin-right: 10px;
 }
 
-.headers p {
+.header-item p {
     font-size: 16px;
     color: #666;
     padding-bottom: 10px;
-}
-
-.sidebar__header h2 {
-    font-size: 36px;
-    font-weight: bold;
-    margin-right: 10px;
-}
-
-.sidebar__header p {
-    font-size: 16px;
-    color: #666;
 }
 
 .days {

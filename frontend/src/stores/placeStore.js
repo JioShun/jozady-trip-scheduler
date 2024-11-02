@@ -48,7 +48,7 @@ export const usePlaceStore = defineStore('place', {
             }
         },
 
-        // 場所を処理する関数
+        // place_idを指定して場所情報を取得・保存する関数
         async handlePlace(placeId) {
             try {
                 const response = await fetch('/api/places/handlePlace', { // 
@@ -64,5 +64,25 @@ export const usePlaceStore = defineStore('place', {
                 console.error('Error handling place:', error);
             }
         },
+
+        // placeDataを受け取ってplace情報を保存する関数
+        async savePlace(placeData) {
+            try {
+                const response = await fetch('/api/places/addPlace', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(placeData),
+                });
+                if (response.ok) {
+                    const newPlace = await response.json();
+                    console.log(newPlace);
+                    this.places.push(newPlace);
+                }
+            } catch (error) {
+                console.error('Error saving place:', error);
+            }
+        },
+
+
     },
 });
