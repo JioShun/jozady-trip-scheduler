@@ -29,7 +29,7 @@
             <div class="place-info">
                 <strong class="place-title">{{ props.element.name }}</strong>
                 <div class="place-details">
-                    <p>{{ props.element.formatted_address }}</p>
+                    <p>{{ props.element.memo }}</p>
                 </div>
             </div>
 

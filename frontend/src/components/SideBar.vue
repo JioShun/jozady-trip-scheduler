@@ -17,7 +17,7 @@
                     @click="selectDay(index)"
                 >
                     <p>{{ day.name }}</p>
-                    <span>{{ day.date }}</span>
+                    <span>{{ day.displayDate }}</span>
                 </button>
             </div>
         </div>
@@ -26,12 +26,12 @@
         <div class="sidebar__content">
             <!-- スケジュール -->
             <VueDraggable
-                v-model="sortedPlaces"
+                v-model="filteredPlaces"
                 :animation="200"
                 ghostClass="ghost"
             >
                 <div
-                    v-for="(element, index) in sortedPlaces"
+                    v-for="(element, index) in filteredPlaces"
                     :key="element.place_index"
                 >
                     <place-item
@@ -93,12 +93,12 @@ const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
 
 const days = ref([
-    { name: "Day1", date: "9/3 火" },
-    { name: "Day2", date: "9/4 水" },
-    { name: "Day3", date: "9/5 木" },
+    { name: "Day1", date: "2024/9/3", displayDate: "9/3 火" },
+    { name: "Day2", date: "2024/9/4", displayDate: "9/4 水" },
+    { name: "Day3", date: "2024/9/5", displayDate: "9/5 木" },
 ]);
 
-const selectedDay = ref(0); // 初期選択された日付（インデックス0が選択された状態）
+const selectedDay = ref(0); // 選択された日付
 
 // ボタンをクリックした際に選択された日付を変更する関数
 const selectDay = (index) => {
@@ -117,6 +117,13 @@ const sortedPlaces = computed(() => {
     return places.value.slice().sort((a, b) => {
         return new Date(a.datetime) - new Date(b.datetime);
     });
+});
+
+const filteredPlaces = computed(() => {
+    return sortedPlaces.value.filter(
+        (place) =>
+            place.datetime.split(" ")[0] === days.value[selectedDay.value].date
+    );
 });
 </script>
 
@@ -168,17 +175,17 @@ const sortedPlaces = computed(() => {
 }
 
 .day span {
-    font-size: 10px;
+    font-size: 12px;
     color: #666;
 }
 
 .day {
     background-color: #f0f0f0;
-    padding: 10px 15px;
+    padding: 7px 12px;
     border-radius: 8px;
     text-align: center;
     color: #333;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
     cursor: pointer;
