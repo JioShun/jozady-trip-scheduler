@@ -141,7 +141,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, defineEmits } from "vue";
+import { ref, onMounted, nextTick, defineEmits, watch } from "vue";
 import { usePlaceStore } from "@/stores/placeStore";
 /* global google */
 
@@ -218,6 +218,15 @@ const addPlaceData = () => {
     // フォームのkeyを変更して再描画
     key.value += 1; //timeの必須だけリセットされないのでkeyを変更して無理やり再描画
 };
+
+// 時間が変更されたときにメモを更新
+watch(time, (newTime) => {
+    if (newTime) {
+        memo.value = `${newTime} 到着`;
+    } else {
+        memo.value = "";
+    }
+});
 
 onMounted(async () => {
     await nextTick(); // レンダリング後に実行

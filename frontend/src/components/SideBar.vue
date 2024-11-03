@@ -25,22 +25,23 @@
         <!-- コンテンツ -->
         <div class="sidebar__content">
             <!-- スケジュール -->
-            <VueDraggable
+            <!-- <VueDraggable
                 v-model="filteredPlaces"
                 :animation="200"
                 ghostClass="ghost"
+            > -->
+            <div
+                v-for="(element, index) in filteredPlaces"
+                :key="element.place_index"
             >
-                <div
-                    v-for="(element, index) in filteredPlaces"
-                    :key="element.place_index"
-                >
-                    <place-item
-                        :element="element"
-                        :removePlace="removePlace"
-                        :index="index + 1"
-                    />
-                </div>
-            </VueDraggable>
+                <place-item
+                    :element="element"
+                    :removePlace="removePlace"
+                    :index="index + 1"
+                    @toggleAddPlaceSidebar="toggleAddPlaceSidebar"
+                />
+            </div>
+            <!-- </VueDraggable> -->
             <div class="button-space"></div>
         </div>
 
@@ -84,7 +85,7 @@
 <script setup>
 // eslint-disable-next-line
 import { ref, watch, onMounted, provide, computed } from "vue";
-import { VueDraggable } from "vue-draggable-plus";
+// import { VueDraggable } from "vue-draggable-plus";
 import { usePlaceStore } from "@/stores/placeStore";
 import placeItem from "./PlaceItem.vue";
 import AddPlaceSideBar from "./AddPlaceSideBar.vue";
