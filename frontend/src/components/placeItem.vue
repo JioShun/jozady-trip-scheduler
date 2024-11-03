@@ -3,7 +3,10 @@
         <!-- ヘッダー（番号・時間） -->
         <div class="item-header">
             <div class="circle-number">{{ props.index }}</div>
-            <span class="time">~08:40</span>
+            <span class="time"
+                >{{ props.element.datetime.split(" ")[0] }}
+                {{ formatTime(props.element.datetime) }}</span
+            >
         </div>
 
         <!-- スポット情報（写真・名前・メニューバー） -->
@@ -127,6 +130,12 @@ const handleClickOutside = (event) => {
     if (menuContainer.value && !menuContainer.value.contains(event.target)) {
         isMenuOpen.value = false;
     }
+};
+
+const formatTime = (datetime) => {
+    const time = datetime.split(" ")[1];
+    const [hour, minute] = time.split(":");
+    return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
 };
 
 onMounted(() => {

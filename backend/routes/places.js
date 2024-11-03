@@ -26,7 +26,7 @@ const postPlace = async (placeInfo) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
-        console.log(placeInfo);
+        //console.log(placeInfo);
         // 必要なデータを配列に展開
         const values = [
             placeInfo.name,
@@ -163,6 +163,7 @@ router.post('/addPlace', async (req, res) => {
                 console.error('Error retrieving inserted place:', err);
                 return res.status(500).send('Failed to retrieve inserted place data');
             }
+            result[0].datetime = result[0].datetime.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" });
             result[0].photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${MAP_API_KEY}`
             res.json(result[0]);
         });

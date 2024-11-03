@@ -25,9 +25,13 @@
         <!-- コンテンツ -->
         <div class="sidebar__content">
             <!-- スケジュール -->
-            <VueDraggable v-model="places" :animation="200" ghostClass="ghost">
+            <VueDraggable
+                v-model="sortedPlaces"
+                :animation="200"
+                ghostClass="ghost"
+            >
                 <div
-                    v-for="(element, index) in places"
+                    v-for="(element, index) in sortedPlaces"
                     :key="element.place_index"
                 >
                     <place-item
@@ -107,6 +111,13 @@ const addPlaceSidebar = ref(false);
 const toggleAddPlaceSidebar = () => {
     addPlaceSidebar.value = !addPlaceSidebar.value;
 };
+
+// ソートされたplacesを返すcomputedプロパティ
+const sortedPlaces = computed(() => {
+    return places.value.slice().sort((a, b) => {
+        return new Date(a.datetime) - new Date(b.datetime);
+    });
+});
 </script>
 
 <style scoped>
