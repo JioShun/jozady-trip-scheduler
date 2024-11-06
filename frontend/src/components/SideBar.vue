@@ -34,7 +34,7 @@
                 v-for="(element, index) in filteredPlaces"
                 :key="element.place_index"
             >
-                <place-item
+                <placeItem
                     :element="element"
                     :removePlace="removePlace"
                     :index="index + 1"

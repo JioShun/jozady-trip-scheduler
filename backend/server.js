@@ -9,13 +9,14 @@ const loggerMiddleware = function (req, res, next) {
     next();
 };
 
+// ルーティングの設定
 const placesRouter = require('./routes/places');
-const con = require('./db');
 const PORT = 3000;
 
-app.use(loggerMiddleware); // ロギングミドルウェアの登録
-app.use(express.json()); // JSONの送信を許可
-app.use(express.static('public', { maxAge: 86400000 })); // 静的ファイルの提供とキャッシュの有効化
+// ミドルウェアの設定
+app.use(loggerMiddleware);
+app.use(express.json());
+app.use(express.static('public', { maxAge: 86400000 }));
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use('/api/places', placesRouter);
 
