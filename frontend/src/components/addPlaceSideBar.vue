@@ -110,7 +110,7 @@
                             label="メモ"
                             variant="solo"
                             rounded="lg"
-                            rows="4"
+                            rows="6"
                             append-inner-icon="edit_note"
                         ></v-textarea>
                     </div>
@@ -176,7 +176,6 @@ const searchBox = () => {
         fields: ["place_id", "name", "formatted_address", "geometry", "types"], // 必要なフィールドを指定
     });
 
-    // 選択された場所に基づいて地図の中心を更新
     autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
 
@@ -244,8 +243,8 @@ onMounted(async () => {
 }
 
 .sidebar-header {
-    padding: 20px;
-    background-color: #ffed9d;
+    padding: 10px;
+    background-color: #fff;
     font-weight: bold;
 }
 
@@ -261,7 +260,7 @@ onMounted(async () => {
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    padding: 40px;
+    padding: 40px 30px;
     height: 100%;
 }
 
@@ -272,7 +271,7 @@ onMounted(async () => {
 }
 
 .sidebar-form > * {
-    flex: none; /* 各要素が余分なスペースを埋めないように設定 */
+    flex: none;
 }
 
 .date-btn {
@@ -283,15 +282,6 @@ onMounted(async () => {
 .v-slide-group__prev,
 .v-slide-group__next {
     min-width: 0 !important;
-}
-
-.search-spot,
-.date-selector {
-    margin-bottom: 20px;
-}
-
-.time {
-    margin-bottom: 40px;
 }
 
 .add-spot-btn {

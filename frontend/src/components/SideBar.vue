@@ -67,7 +67,7 @@
         v-model="addPlaceSidebar"
         location="right"
         temporary
-        width="360"
+        width="400"
         :scrim="false"
         style="z-index: 1"
     >
@@ -129,23 +129,28 @@ const filteredPlaces = computed(() => {
 </script>
 
 <style scoped>
-.add-spot-btn {
-    margin-top: 20px;
-}
-
 .sidebar {
     width: 100%;
     height: 100%;
     background-color: #f4f4f9;
     display: flex;
     flex-direction: column;
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.add_place {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .sidebar-header {
     padding: 20px;
-    background-color: #ffed9d;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding-top: 10px;
+    /* background-color: #fff2b9; */
+    background-color: #fff;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header-item {
@@ -155,15 +160,15 @@ const filteredPlaces = computed(() => {
 }
 
 .header-item h2 {
-    font-size: 36px;
+    font-size: 30px;
     font-weight: bold;
     margin-right: 10px;
 }
 
 .header-item p {
-    font-size: 16px;
+    font-size: 14px;
     color: #666;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 
 .days {
@@ -220,7 +225,7 @@ const filteredPlaces = computed(() => {
 .add_place {
     position: absolute;
     bottom: 20px;
-    transform: translateX(75%);
+    transform: translateX(-50%);
 }
 
 .button-space {
