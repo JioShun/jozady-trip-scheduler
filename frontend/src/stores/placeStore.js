@@ -75,7 +75,7 @@ export const usePlaceStore = defineStore('place', {
                 });
                 if (response.ok) {
                     const newPlace = await response.json();
-                    console.log(newPlace);
+                    // console.log(newPlace);
                     this.places.push(newPlace);
                 }
             } catch (error) {

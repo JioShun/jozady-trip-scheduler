@@ -17,7 +17,7 @@
                     @click="selectDay(index)"
                 >
                     <p>{{ day.name }}</p>
-                    <span>{{ day.date }}</span>
+                    <span>{{ day.displayDate }}</span>
                 </button>
             </div>
         </div>
@@ -25,18 +25,23 @@
         <!-- コンテンツ -->
         <div class="sidebar__content">
             <!-- スケジュール -->
-            <VueDraggable v-model="places" :animation="200" ghostClass="ghost">
-                <div
-                    v-for="(element, index) in places"
-                    :key="element.place_index"
-                >
-                    <place-item
-                        :element="element"
-                        :removePlace="removePlace"
-                        :index="index + 1"
-                    />
-                </div>
-            </VueDraggable>
+            <!-- <VueDraggable
+                v-model="filteredPlaces"
+                :animation="200"
+                ghostClass="ghost"
+            > -->
+            <div
+                v-for="(element, index) in filteredPlaces"
+                :key="element.place_index"
+            >
+                <place-item
+                    :element="element"
+                    :removePlace="removePlace"
+                    :index="index + 1"
+                    @toggleAddPlaceSidebar="toggleAddPlaceSidebar"
+                />
+            </div>
+            <!-- </VueDraggable> -->
             <div class="button-space"></div>
         </div>
 
@@ -62,7 +67,7 @@
         v-model="addPlaceSidebar"
         location="right"
         temporary
-        width="360"
+        width="400"
         :scrim="false"
         style="z-index: 1"
     >
@@ -80,7 +85,7 @@
 <script setup>
 // eslint-disable-next-line
 import { ref, watch, onMounted, provide, computed } from "vue";
-import { VueDraggable } from "vue-draggable-plus";
+// import { VueDraggable } from "vue-draggable-plus";
 import { usePlaceStore } from "@/stores/placeStore";
 import placeItem from "./PlaceItem.vue";
 import AddPlaceSideBar from "./AddPlaceSideBar.vue";
@@ -89,44 +94,63 @@ const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
 
 const days = ref([
-    { name: "Day1", date: "9/3 火" },
-    { name: "Day2", date: "9/4 水" },
-    { name: "Day3", date: "9/5 木" },
+    { name: "Day1", date: "2024/9/3", displayDate: "9/3 火" },
+    { name: "Day2", date: "2024/9/4", displayDate: "9/4 水" },
+    { name: "Day3", date: "2024/9/5", displayDate: "9/5 木" },
 ]);
 
-const selectedDay = ref(0); // 初期選択された日付（インデックス0が選択された状態）
+const selectedDay = ref(0); // 選択された日付
 
 // ボタンをクリックした際に選択された日付を変更する関数
 const selectDay = (index) => {
     selectedDay.value = index;
 };
 
-const addPlaceSidebar = ref(true);
+const addPlaceSidebar = ref(false);
 
 // スポット追加サイドバーの開閉
 const toggleAddPlaceSidebar = () => {
     addPlaceSidebar.value = !addPlaceSidebar.value;
 };
+
+// ソートされたplacesを返すcomputedプロパティ
+const sortedPlaces = computed(() => {
+    return places.value.slice().sort((a, b) => {
+        return new Date(a.datetime) - new Date(b.datetime);
+    });
+});
+
+const filteredPlaces = computed(() => {
+    return sortedPlaces.value.filter(
+        (place) =>
+            place.datetime.split(" ")[0] === days.value[selectedDay.value].date
+    );
+});
 </script>
 
 <style scoped>
-.add-spot-btn {
-    margin-top: 20px;
-}
-
 .sidebar {
     width: 100%;
     height: 100%;
     background-color: #f4f4f9;
     display: flex;
     flex-direction: column;
-    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.add_place {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .sidebar-header {
     padding: 20px;
-    background-color: #ffed9d;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding-top: 10px;
+    /* background-color: #fff2b9; */
+    background-color: #fff;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header-item {
@@ -136,15 +160,15 @@ const toggleAddPlaceSidebar = () => {
 }
 
 .header-item h2 {
-    font-size: 36px;
+    font-size: 30px;
     font-weight: bold;
     margin-right: 10px;
 }
 
 .header-item p {
-    font-size: 16px;
+    font-size: 14px;
     color: #666;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 
 .days {
@@ -157,17 +181,17 @@ const toggleAddPlaceSidebar = () => {
 }
 
 .day span {
-    font-size: 10px;
+    font-size: 12px;
     color: #666;
 }
 
 .day {
     background-color: #f0f0f0;
-    padding: 10px 15px;
+    padding: 7px 12px;
     border-radius: 8px;
     text-align: center;
     color: #333;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -201,7 +225,7 @@ const toggleAddPlaceSidebar = () => {
 .add_place {
     position: absolute;
     bottom: 20px;
-    transform: translateX(75%);
+    transform: translateX(-50%);
 }
 
 .button-space {

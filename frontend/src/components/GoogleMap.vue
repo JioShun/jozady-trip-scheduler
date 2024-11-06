@@ -1,10 +1,10 @@
 <template>
-    <v-text-field
+    <!-- <v-text-field
         variant="solo"
         id="autocomplete"
         prepend-inner-icon="search"
         dense
-    ></v-text-field>
+    ></v-text-field> -->
     <div id="map"></div>
 </template>
 
@@ -80,7 +80,7 @@ onMounted(async () => {
 <style scoped>
 #map {
     width: 100%;
-    height: 100vh;
+    height: 100%;
 }
 
 .v-text-field {

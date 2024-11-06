@@ -3,7 +3,10 @@
         <!-- ヘッダー（番号・時間） -->
         <div class="item-header">
             <div class="circle-number">{{ props.index }}</div>
-            <span class="time">~08:40</span>
+            <span class="time"
+                >{{ props.element.datetime.split(" ")[0] }}
+                {{ formatTime(props.element.datetime) }}</span
+            >
         </div>
 
         <!-- スポット情報（写真・名前・メニューバー） -->
@@ -26,7 +29,7 @@
             <div class="place-info">
                 <strong class="place-title">{{ props.element.name }}</strong>
                 <div class="place-details">
-                    <p>{{ props.element.formatted_address }}</p>
+                    <pre>{{ props.element.memo }}</pre>
                 </div>
             </div>
 
@@ -70,6 +73,7 @@
                         'add-spot-button-hover': isHovering,
                         'add-spot-button': !isHovering,
                     }"
+                    @click="toggleAddPlaceSidebar"
                 >
                     スポットを追加
                 </v-btn>
@@ -80,7 +84,7 @@
 
 <script setup>
 // eslint-disable-next-line
-import { ref, defineProps, onMounted, onBeforeUnmount } from "vue";
+import { ref, defineProps, onMounted, onBeforeUnmount, defineEmits } from "vue";
 import { useMarkerStore } from "@/stores/markerStore";
 
 const { openInfoWindow } = useMarkerStore();
@@ -100,12 +104,12 @@ const props = defineProps({
     },
 });
 
-const menuItems = ref([
-    { title: "時間の編集" },
-    { title: "コメントの編集" },
-    { title: "複製" },
-    { title: "削除" },
-]);
+const emit = defineEmits(["toggleAddPlaceSidebar", "editPlace"]);
+const toggleAddPlaceSidebar = () => {
+    emit("toggleAddPlaceSidebar");
+};
+
+const menuItems = ref([{ title: "編集" }, { title: "削除" }]);
 
 const isMenuOpen = ref(false);
 const menuContainer = ref(null);
@@ -118,24 +122,17 @@ const toggleMenu = () => {
 const selectMenu = (option) => {
     if (option.title === "削除") {
         props.removePlace(props.element.place_index);
+    } else if (option.title === "編集") {
+        emit("editPlace", props.element);
     }
     isMenuOpen.value = false; // メニューを閉じる
 };
 
-// メニュー外のクリックを検出する関数
-const handleClickOutside = (event) => {
-    if (menuContainer.value && !menuContainer.value.contains(event.target)) {
-        isMenuOpen.value = false;
-    }
+const formatTime = (datetime) => {
+    const time = datetime.split(" ")[1];
+    const [hour, minute] = time.split(":");
+    return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
 };
-
-onMounted(() => {
-    document.addEventListener("click", handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-    document.removeEventListener("click", handleClickOutside);
-});
 </script>
 
 <style scoped>
@@ -178,11 +175,18 @@ onBeforeUnmount(() => {
     align-items: center;
     justify-content: space-between;
     position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .item-content:hover {
     transform: scale(1.05);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.item-content:hover .place-details {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
 }
 
 .place-image {

@@ -45,7 +45,7 @@
                             placeholder=""
                             label="スポットを検索"
                             variant="solo"
-                            rounded="xl"
+                            rounded="lg"
                             :rules="[required]"
                         ></v-text-field>
                     </div>
@@ -84,7 +84,7 @@
                         label="日付を選択"
                         v-model="selectedDate"
                         variant="solo"
-                        rounded="xl"
+                        rounded="lg"
                         class="date-selector"
                         :rules="[required]"
                     >
@@ -100,7 +100,7 @@
                             label="時間を選択"
                             type="time"
                             variant="solo"
-                            rounded="xl"
+                            rounded="lg"
                             :rules="[required]"
                         ></v-text-field>
                     </div>
@@ -110,7 +110,7 @@
                             label="メモ"
                             variant="solo"
                             rounded="lg"
-                            rows="4"
+                            rows="6"
                             append-inner-icon="edit_note"
                         ></v-textarea>
                     </div>
@@ -121,7 +121,7 @@
                             size="x-large"
                             color="yellow-darken-3"
                             height="40"
-                            rounded="xl"
+                            rounded="lg"
                             elevation="6"
                             :disabled="!form"
                             block
@@ -141,7 +141,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, defineEmits } from "vue";
+import { ref, onMounted, nextTick, defineEmits, watch } from "vue";
 import { usePlaceStore } from "@/stores/placeStore";
 /* global google */
 
@@ -176,7 +176,6 @@ const searchBox = () => {
         fields: ["place_id", "name", "formatted_address", "geometry", "types"], // 必要なフィールドを指定
     });
 
-    // 選択された場所に基づいて地図の中心を更新
     autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
 
@@ -219,6 +218,15 @@ const addPlaceData = () => {
     key.value += 1; //timeの必須だけリセットされないのでkeyを変更して無理やり再描画
 };
 
+// 時間が変更されたときにメモを更新
+watch(time, (newTime) => {
+    if (newTime) {
+        memo.value = `${newTime} 到着`;
+    } else {
+        memo.value = "";
+    }
+});
+
 onMounted(async () => {
     await nextTick(); // レンダリング後に実行
     searchBox();
@@ -235,8 +243,8 @@ onMounted(async () => {
 }
 
 .sidebar-header {
-    padding: 20px;
-    background-color: #ffed9d;
+    padding: 10px;
+    background-color: #fff;
     font-weight: bold;
 }
 
@@ -252,7 +260,7 @@ onMounted(async () => {
 .sidebar-content {
     display: flex;
     flex-direction: column;
-    padding: 40px;
+    padding: 40px 30px;
     height: 100%;
 }
 
@@ -263,7 +271,7 @@ onMounted(async () => {
 }
 
 .sidebar-form > * {
-    flex: none; /* 各要素が余分なスペースを埋めないように設定 */
+    flex: none;
 }
 
 .date-btn {
@@ -274,12 +282,6 @@ onMounted(async () => {
 .v-slide-group__prev,
 .v-slide-group__next {
     min-width: 0 !important;
-}
-
-.search-spot,
-.date-selector,
-.time {
-    margin-bottom: 20px;
 }
 
 .add-spot-btn {
