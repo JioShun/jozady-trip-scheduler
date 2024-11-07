@@ -1,38 +1,22 @@
 <template>
     <v-app>
         <!-- ヘッダー -->
-        <v-app-bar ref="a" icon="menu" elevation="0" density="comfortable">
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-            <v-app-bar-title>スケジュール作成</v-app-bar-title>
+        <v-app-bar ref="a" elevation="0" density="comfortable" color="#e4e2dd">
+            <img
+                :src="require('@/assets/Jozady.png')"
+                alt="Jozady"
+                class="logo"
+            />
         </v-app-bar>
 
         <!-- メインコンテンツ -->
         <v-main>
-            <div class="container">
-                <!-- ナビゲーションドロワー -->
-                <div class="nav-drawer">
-                    <NavigationDrawer />
-                </div>
-
-                <!-- マップ -->
-                <div class="map">
-                    <GoogleMap />
-                </div>
-
-                <!-- サイドバー（行程表） -->
-                <div class="side">
-                    <SideBar />
-                </div>
-            </div>
+            <router-view />
         </v-main>
     </v-app>
 </template>
 
-<script setup>
-import GoogleMap from "./components/GoogleMap.vue";
-import SideBar from "./components/SideBar.vue";
-import NavigationDrawer from "./components/NavigationDrawer.vue";
-</script>
+<script setup></script>
 
 <style>
 * {
@@ -59,17 +43,8 @@ import NavigationDrawer from "./components/NavigationDrawer.vue";
     gap: 10px;
 }
 
-.container {
-    display: flex;
-}
-
-.map {
-    width: 70%;
-    height: calc(100vh - 56px);
-}
-
-.side {
-    width: 30%;
-    height: calc(100vh - 56px);
+.logo {
+    height: 70px;
+    overflow: hidden;
 }
 </style>
