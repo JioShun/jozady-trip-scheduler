@@ -35,6 +35,7 @@
                 title="ホームへ戻る"
                 class="back-home"
                 value="backHome"
+                @click="$router.push('/')"
             ></v-list-item>
         </template>
     </v-navigation-drawer>

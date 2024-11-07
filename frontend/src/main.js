@@ -5,6 +5,7 @@ import { usePlaceStore } from './stores/placeStore'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { loadGoogleApi } from './plugins/loadGoogleApi'
+import router from '@/routes/index.js'
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -15,6 +16,7 @@ async function main() {
     await loadGoogleApi(apiKey)
     app.use(pinia);
     app.use(vuetify);
+    app.use(router);
     await usePlaceStore().fetchPlaces();
     app.mount('#app');
 }
