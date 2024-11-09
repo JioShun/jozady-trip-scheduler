@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer class="nav-drawer">
+    <v-navigation-drawer class="nav-drawer" width="200">
         <v-list density="compact" nav>
             <v-list-item
                 prepend-icon="list"
@@ -13,12 +13,6 @@
 <script setup></script>
 
 <style scoped>
-.nav-drawer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 .back-home {
     margin-bottom: 30px;
 }
