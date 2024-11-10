@@ -14,21 +14,7 @@
         </v-app-bar>
 
         <!-- ナビゲーションドロワー -->
-        <v-navigation-drawer
-            v-model="drawer"
-            app
-            width="200"
-            color="#e4e2dd"
-            :temporary="!mdAndUp"
-        >
-            <v-list dense nav>
-                <v-list-item
-                    prepend-icon="list"
-                    title="しおり一覧"
-                    value="itineraries"
-                ></v-list-item
-            ></v-list>
-        </v-navigation-drawer>
+        <component :is="currentDrawer" v-model="drawer" />
 
         <!-- メインコンテンツ -->
         <v-main>
@@ -38,10 +24,32 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
+import ScheduleNavigationDrawer from "./components/ScheduleNavigationDrawer.vue";
+import HomeNavigationDrawer from "./components/HomeNavigationDrawer.vue";
+
+const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
+
+const currentDrawer = computed(() => {
+    if (route.name === "home") {
+        return HomeNavigationDrawer;
+    } else if (route.name === "schedule") {
+        return ScheduleNavigationDrawer;
+    }
+    return null;
+});
+
+onMounted(() => {
+    if (mdAndUp.value) drawer.value = true;
+    else drawer.value = false;
+});
+watch(mdAndUp, () => {
+    drawer.value = mdAndUp.value;
+});
 </script>
 
 <style>

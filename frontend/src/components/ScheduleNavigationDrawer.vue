@@ -1,5 +1,11 @@
 <template>
-    <v-navigation-drawer expand-on-hover rail class="nav-drawer">
+    <v-navigation-drawer
+        :expand-on-hover="mdAndUp"
+        :rail="mdAndUp"
+        :permanent="mdAndUp"
+        :temporary="!mdAndUp"
+        class="nav-drawer"
+    >
         <v-list>
             <v-list-item
                 prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
@@ -41,7 +47,10 @@
     </v-navigation-drawer>
 </template>
 
-<script setup></script>
+<script setup>
+import { useDisplay } from "vuetify";
+const { mdAndUp } = useDisplay();
+</script>
 
 <style scoped>
 .nav-drawer {

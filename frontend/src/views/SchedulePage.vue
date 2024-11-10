@@ -1,10 +1,5 @@
 <template>
     <div class="container">
-        <!-- ナビゲーションドロワー -->
-        <div class="nav-drawer">
-            <NavigationDrawer />
-        </div>
-
         <!-- マップ -->
         <div class="map">
             <GoogleMap />
@@ -20,7 +15,6 @@
 <script setup>
 import GoogleMap from "@/components/GoogleMap.vue";
 import SideBar from "@/components/SideBar.vue";
-import NavigationDrawer from "@/components/ScheduleNavigationDrawer.vue";
 </script>
 
 <style scoped>

@@ -1,10 +1,5 @@
 <template>
     <div class="home">
-        <!-- ナビゲーションドロワー -->
-        <div class="nav-drawer">
-            <HomeNavigationDrawer />
-        </div>
-
         <!-- ホームコンテンツ -->
         <div class="home-content">
             <h1>旅のしおり一覧</h1>
@@ -49,7 +44,7 @@
 </template>
 
 <script setup>
-import HomeNavigationDrawer from "@/components/HomeNavigationDrawer.vue";
+// import HomeNavigationDrawer from "@/components/HomeNavigationDrawer.vue";
 </script>
 
 <style scoped>
