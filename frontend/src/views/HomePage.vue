@@ -9,7 +9,7 @@
 
             <div class="itineraries">
                 <v-container>
-                    <v-row justify="start">
+                    <v-row justify="start" class="ga-3">
                         <!-- 1つ目のカード -->
                         <v-col cols="auto" v-for="k in 6" :key="k">
                             <ItineraryCard />
@@ -30,6 +30,7 @@ import ItineraryCard from "@/components/ItineraryCard.vue";
 .home {
     display: flex;
     background-color: #f4f4f9;
+    height: 100%;
 }
 
 .home-content {

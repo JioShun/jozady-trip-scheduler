@@ -67,7 +67,7 @@
                 <v-card-actions>
                     <v-btn
                         color="primary"
-                        @click="dialog = false"
+                        @click="showNewItinerary"
                         size="large"
                         :disabled="!form"
                         >作成</v-btn
@@ -87,6 +87,12 @@ const form = ref(false);
 const peopleOptions = ["1人", "2人", "3人", "4人以上"];
 const relationshipOptions = ["友人", "家族", "恋人", "同僚", "その他"];
 const required = (v) => !!v || "必須";
+
+const showNewItinerary = () => {
+    // 入力した内容をコンソールに表示
+    console.log(form);
+    dialog.value = false;
+};
 </script>
 
 <style scoped>

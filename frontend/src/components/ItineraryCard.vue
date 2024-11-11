@@ -1,5 +1,5 @@
 <template>
-    <v-card width="230" elevation="6" rounded="lg">
+    <v-card width="230" elevation="6" rounded="lg" class="itinerary-card">
         <v-img
             class="item-img"
             height="200px"
@@ -45,5 +45,13 @@ const selectMenu = (menu) => {
 .item-img {
     margin: 15px 15px 0px 15px;
     border-radius: 5px;
+}
+
+.itinerary-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.itinerary-card:hover {
+    transform: scale(1.05);
 }
 </style>
