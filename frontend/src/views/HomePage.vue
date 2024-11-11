@@ -9,17 +9,14 @@
 
             <div class="itineraries">
                 <v-container>
-                    <v-row justify="start" class="ga-2">
+                    <v-row justify="start">
                         <!-- 1つ目のカード -->
                         <v-col
                             cols="auto"
-                            v-for="(itinerary, index) in itineraries"
-                            :key="index"
+                            v-for="itinerary in itinerariesSorted"
+                            :key="itinerary.itineraryId"
                         >
-                            <ItineraryCard
-                                :itinerary="itinerary"
-                                :index="index"
-                            />
+                            <ItineraryCard :itinerary="itinerary" />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -29,11 +26,19 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
 
-const { itineraries } = useItineraryStore();
+const itineraries = computed(() => useItineraryStore().itineraries);
+
+const itinerariesSorted = computed(() => {
+    return itineraries.value.slice().sort((a, b) => {
+        return new Date(a.startDate) - new Date(b.startDate);
+    });
+});
 </script>
 
 <style scoped>

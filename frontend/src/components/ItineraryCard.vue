@@ -1,5 +1,5 @@
 <template>
-    <v-card width="230" elevation="6" rounded="lg" class="itinerary-card">
+    <v-card width="220" elevation="6" rounded="lg" class="itinerary-card">
         <v-img
             class="item-img"
             height="200px"
@@ -17,14 +17,15 @@
             <template v-slot:append>
                 <v-btn
                     density="compact"
+                    size="small"
                     icon="more_vert"
                     variant="text"
                 ></v-btn>
                 <v-menu activator="parent" location="start">
                     <v-list>
                         <v-list-item
-                            v-for="(menu, index) in menus"
-                            :key="index"
+                            v-for="menu in menus"
+                            :key="menu.title"
                             @click="selectMenu(menu)"
                         >
                             <v-list-item-title>{{
@@ -53,10 +54,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    index: {
-        type: Number,
-        required: true,
-    },
 });
 
 const displayDate = (date) => {
@@ -66,7 +63,7 @@ const displayDate = (date) => {
 
 const selectMenu = (menu) => {
     if (menu.title === "削除") {
-        removeItinerary(props.index);
+        removeItinerary(props.itinerary.itineraryId);
     }
 };
 </script>
@@ -86,7 +83,7 @@ const selectMenu = (menu) => {
 }
 
 .title {
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 5px;
 }
 
