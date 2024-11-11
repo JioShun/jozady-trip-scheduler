@@ -42,7 +42,7 @@
 import { ref, defineProps } from "vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
 
-const { deleteItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
+const { removeItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
 
 // メニューのリスト
 const menus = ref([{ title: "削除" }, { title: "編集" }]);
@@ -66,7 +66,7 @@ const displayDate = (date) => {
 
 const selectMenu = (menu) => {
     if (menu.title === "削除") {
-        deleteItinerary(props.index);
+        removeItinerary(props.index);
     }
 };
 </script>

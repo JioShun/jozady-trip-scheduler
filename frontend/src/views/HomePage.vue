@@ -16,7 +16,10 @@
                             v-for="(itinerary, index) in itineraries"
                             :key="index"
                         >
-                            <ItineraryCard :itinerary="itinerary" />
+                            <ItineraryCard
+                                :itinerary="itinerary"
+                                :index="index"
+                            />
                         </v-col>
                     </v-row>
                 </v-container>
