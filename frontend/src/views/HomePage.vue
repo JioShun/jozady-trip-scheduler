@@ -12,32 +12,7 @@
                     <v-row justify="start">
                         <!-- 1つ目のカード -->
                         <v-col cols="auto" v-for="k in 6" :key="k">
-                            <v-card class="mx-auto" max-width="300">
-                                <v-img
-                                    height="200px"
-                                    src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                                    cover
-                                ></v-img>
-
-                                <v-card-title>
-                                    Top western road trips
-                                </v-card-title>
-
-                                <v-card-subtitle>
-                                    1,000 miles of wonder
-                                </v-card-subtitle>
-
-                                <v-card-actions>
-                                    <v-btn
-                                        color="orange-lighten-2"
-                                        text="Explore"
-                                    ></v-btn>
-
-                                    <v-spacer></v-spacer>
-
-                                    <v-btn icon="menu"></v-btn>
-                                </v-card-actions>
-                            </v-card>
+                            <ItineraryCard />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -48,6 +23,7 @@
 
 <script setup>
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
+import ItineraryCard from "@/components/ItineraryCard.vue";
 </script>
 
 <style scoped>

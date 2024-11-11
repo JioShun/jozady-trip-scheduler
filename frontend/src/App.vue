@@ -11,6 +11,7 @@
                 alt="Jozady"
                 class="logo"
             />
+            <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
         </v-app-bar>
 
         <!-- ナビゲーションドロワー -->
@@ -33,6 +34,7 @@ import HomeNavigationDrawer from "./components/HomeNavigationDrawer.vue";
 const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
+const borderEnabled = ref(false);
 
 const currentDrawer = computed(() => {
     if (route.name === "home") {
@@ -42,6 +44,17 @@ const currentDrawer = computed(() => {
     }
     return null;
 });
+
+const toggleBorder = () => {
+    borderEnabled.value = !borderEnabled.value;
+    document.querySelectorAll("*").forEach((el) => {
+        if (borderEnabled.value) {
+            el.style.border = "1px solid #ccc";
+        } else {
+            el.style.border = "";
+        }
+    });
+};
 
 onMounted(() => {
     if (mdAndUp.value) drawer.value = true;
@@ -78,7 +91,8 @@ watch(mdAndUp, () => {
 }
 
 .logo {
-    height: 70px;
+    padding-left: 10px;
+    height: 100%;
     overflow: hidden;
 }
 </style>
