@@ -2,12 +2,20 @@
     <v-app>
         <!-- ヘッダー -->
         <v-app-bar ref="a" elevation="0" density="comfortable" color="#e4e2dd">
+            <v-app-bar-nav-icon
+                @click="drawer = !drawer"
+                v-if="!mdAndUp"
+            ></v-app-bar-nav-icon>
             <img
                 :src="require('@/assets/Jozady.png')"
                 alt="Jozady"
                 class="logo"
             />
+            <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
         </v-app-bar>
+
+        <!-- ナビゲーションドロワー -->
+        <component :is="currentDrawer" v-model="drawer" />
 
         <!-- メインコンテンツ -->
         <v-main>
@@ -16,7 +24,46 @@
     </v-app>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted, ref, watch, computed } from "vue";
+import { useRoute } from "vue-router";
+import { useDisplay } from "vuetify";
+import ScheduleNavigationDrawer from "./components/ScheduleNavigationDrawer.vue";
+import HomeNavigationDrawer from "./components/HomeNavigationDrawer.vue";
+
+const route = useRoute();
+const { mdAndUp } = useDisplay();
+const drawer = ref(false);
+const borderEnabled = ref(false);
+
+const currentDrawer = computed(() => {
+    if (route.name === "home") {
+        return HomeNavigationDrawer;
+    } else if (route.name === "schedule") {
+        return ScheduleNavigationDrawer;
+    }
+    return null;
+});
+
+const toggleBorder = () => {
+    borderEnabled.value = !borderEnabled.value;
+    document.querySelectorAll("*").forEach((el) => {
+        if (borderEnabled.value) {
+            el.style.border = "1px solid #ccc";
+        } else {
+            el.style.border = "";
+        }
+    });
+};
+
+onMounted(() => {
+    if (mdAndUp.value) drawer.value = true;
+    else drawer.value = false;
+});
+watch(mdAndUp, () => {
+    drawer.value = mdAndUp.value;
+});
+</script>
 
 <style>
 * {
@@ -44,7 +91,8 @@
 }
 
 .logo {
-    height: 70px;
+    padding-left: 10px;
+    height: 100%;
     overflow: hidden;
 }
 </style>

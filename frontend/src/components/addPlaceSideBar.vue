@@ -50,32 +50,6 @@
                         ></v-text-field>
                     </div>
 
-                    <!-- 日付の選択 -->
-                    <!-- <div class="date-selector">
-                        <v-slide-group
-                            show-arrows
-                            mandatory
-                            center-active
-                            v-model="selectedDate"
-                            class="date-slide-group"
-                        >
-                            <v-slide-group-item
-                                v-for="date in dateOptions"
-                                :key="date"
-                                v-slot="{ isSelected, toggle }"
-                            >
-                                <v-btn
-                                    :color="isSelected ? '#ffed9d' : undefined"
-                                    class="date-btn"
-                                    rounded
-                                    @click="toggle"
-                                >
-                                    {{ date.displayDate }}
-                                </v-btn>
-                            </v-slide-group-item>
-                        </v-slide-group>
-                    </div> -->
-
                     <!-- 日付選択 -->
                     <v-select
                         :items="dateOptions"
