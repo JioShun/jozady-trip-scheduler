@@ -9,10 +9,14 @@
 
             <div class="itineraries">
                 <v-container>
-                    <v-row justify="start" class="ga-3">
+                    <v-row justify="start" class="ga-2">
                         <!-- 1つ目のカード -->
-                        <v-col cols="auto" v-for="k in 6" :key="k">
-                            <ItineraryCard />
+                        <v-col
+                            cols="auto"
+                            v-for="(itinerary, index) in itineraries"
+                            :key="index"
+                        >
+                            <ItineraryCard :itinerary="itinerary" />
                         </v-col>
                     </v-row>
                 </v-container>
@@ -24,6 +28,9 @@
 <script setup>
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
+import { useItineraryStore } from "@/stores/itineraryStore";
+
+const { itineraries } = useItineraryStore();
 </script>
 
 <style scoped>

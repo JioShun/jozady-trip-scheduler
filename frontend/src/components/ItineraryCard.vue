@@ -3,15 +3,20 @@
         <v-img
             class="item-img"
             height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            :src="`https://picsum.photos/200/300?random=${Math.random()}`"
             cover
         />
         <v-card-item>
-            <v-card-title>新しい旅行</v-card-title>
-            <v-card-subtitle>2024/9/3 ~ 2024/9/5</v-card-subtitle>
+            <v-card-title class="title">{{
+                props.itinerary.title
+            }}</v-card-title>
+            <v-card-subtitle class="subtitle"
+                >{{ displayDate(props.itinerary.startDate) }} ~
+                {{ displayDate(props.itinerary.endDate) }}</v-card-subtitle
+            >
             <template v-slot:append>
                 <v-btn
-                    density="comfortable"
+                    density="compact"
                     icon="more_vert"
                     variant="text"
                 ></v-btn>
@@ -34,10 +39,35 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineProps } from "vue";
+import { useItineraryStore } from "@/stores/itineraryStore";
+
+const { deleteItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
+
+// メニューのリスト
 const menus = ref([{ title: "削除" }, { title: "編集" }]);
+
+// propsの定義
+const props = defineProps({
+    itinerary: {
+        type: Object,
+        required: true,
+    },
+    index: {
+        type: Number,
+        required: true,
+    },
+});
+
+const displayDate = (date) => {
+    const d = new Date(date);
+    return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+};
+
 const selectMenu = (menu) => {
-    console.log(menu.title);
+    if (menu.title === "削除") {
+        deleteItinerary(props.index);
+    }
 };
 </script>
 
@@ -53,5 +83,14 @@ const selectMenu = (menu) => {
 
 .itinerary-card:hover {
     transform: scale(1.05);
+}
+
+.title {
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 13px;
 }
 </style>
