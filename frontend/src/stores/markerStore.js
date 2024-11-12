@@ -13,7 +13,7 @@ export const useMarkerStore = defineStore('marker', {
             const marker = new AdvancedMarkerElement({
                 map,
                 position: { lat: place.location.lat, lng: place.location.lng },
-                title: place.place_index.toString(),
+                title: place.id.toString(),
             });
             this.markers.push(marker);
 

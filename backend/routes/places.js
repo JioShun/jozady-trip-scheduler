@@ -22,7 +22,7 @@ const getPlaceInfo = async (placeId) => {
 const postPlace = async (placeInfo) => {
     return new Promise((resolve, reject) => {
         const query = `
-            INSERT INTO Place (name, formatted_address, location, place_id, memo, types, datetime, photo_reference) 
+            INSERT INTO Places (name, formatted_address, location, place_id, memo, types, datetime, photo_reference) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
@@ -63,7 +63,7 @@ const getPlacePhotoUrl = async (placeInfo) => {
 router.get('/', async (req, res) => {
     try {
         // Placeテーブルから全データを取得
-        con.query('SELECT * FROM Place', async (err, result, fields) => {
+        con.query('SELECT * FROM Places', async (err, result, fields) => {
             if (err) throw err;
 
             // すべてのplaceに対してphotoUrlを取得し、Promise.allで並列処理
@@ -95,9 +95,9 @@ router.get('/', async (req, res) => {
 
 // DELETEリクエスト
 router.delete('/:id', (req, res) => {
-    const placeIndex = req.params.id;
-    const query = 'DELETE FROM Place WHERE place_index = ?';
-    con.query(query, [placeIndex], (err, result) => {
+    const id = req.params.id;
+    const query = 'DELETE FROM Places WHERE id = ?';
+    con.query(query, [id], (err, result) => {
         if (err) {
             console.error('Error deleting from Place:', err);
             return res.status(500).json({ message: 'Failed to delete place data' });
@@ -132,7 +132,7 @@ router.post('/handlePlace', async (req, res) => {
         const datetime = null; // datetimeはnullで保存
         const newPlaceInfo = [name, formatted_address, location, place_id, memo, newTypes, datetime]; // place情報を作成
         await postPlace(newPlaceInfo); // データベースに新しいplaceを保存
-        con.query('SELECT * FROM Place ORDER BY place_index DESC LIMIT 1', async (err, result) => { // 最新のplaceを取得
+        con.query('SELECT * FROM Places ORDER BY id DESC LIMIT 1', async (err, result) => { // 最新のplaceを取得
             if (err) throw err;
             result[0].photoUrl = await getPlacePhotoUrl(placeInfo); // photoUrlを追加
             res.json(result[0]); // 最新のplaceを返す
@@ -158,7 +158,7 @@ router.post('/addPlace', async (req, res) => {
         const photoReference = response.data.result.photos[0].photo_reference;
         placeData.photoReference = photoReference;
         const insertId = await postPlace(placeData);
-        con.query('SELECT * FROM Place WHERE place_index = ?', [insertId], async (err, result) => {
+        con.query('SELECT * FROM Places WHERE id = ?', [insertId], async (err, result) => {
             if (err) {
                 console.error('Error retrieving inserted place:', err);
                 return res.status(500).send('Failed to retrieve inserted place data');
