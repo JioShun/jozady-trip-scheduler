@@ -121,7 +121,7 @@ const toggleMenu = () => {
 // メニュー項目が選択されたときの処理
 const selectMenu = (option) => {
     if (option.title === "削除") {
-        props.removePlace(props.element.place_index);
+        props.removePlace(props.element.id);
     } else if (option.title === "編集") {
         emit("editPlace", props.element);
     }

@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-//import { usePlaceStore } from './stores/placeStore'
-import { useItineraryStore } from './stores/itineraryStore'
+import { usePlaceStore } from './stores/placeStore'
+// import { useItineraryStore } from './stores/itineraryStore'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import { loadGoogleApi } from './plugins/loadGoogleApi'
@@ -18,8 +18,8 @@ async function main() {
     app.use(pinia);
     app.use(vuetify);
     app.use(router);
-    // await usePlaceStore().fetchPlaces();
-    await useItineraryStore().fetchItineraries();
+    await usePlaceStore().fetchPlaces();
+    // await useItineraryStore().fetchItineraries();
     app.mount('#app');
 }
 

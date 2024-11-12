@@ -36,12 +36,12 @@ export const usePlaceStore = defineStore('place', {
         },
 
         // 指定した場所を削除する関数
-        async removePlace(place_index) {
+        async removePlace(id) {
             try {
-                const response = await fetch(`/api/places/${place_index}`, { method: 'DELETE' });
+                const response = await fetch(`/api/places/${id}`, { method: 'DELETE' });
                 if (response.ok) {
-                    useMarkerStore().removeMarker(place_index);
-                    this.places = this.places.filter(p => p.place_index !== place_index);
+                    useMarkerStore().removeMarker(id);
+                    this.places = this.places.filter(p => p.id !== id);
                 }
             } catch (error) {
                 console.error('Error removing place:', error);

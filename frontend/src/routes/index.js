@@ -14,8 +14,9 @@ const routes = [
     {
         path: '/schedule',
         component: SchedulePage,
-        name: 'schedule'
-    },
+        name: 'schedule',
+        props: true
+    }
 ];
 
 const router = createRouter({
