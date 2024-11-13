@@ -118,9 +118,23 @@ const saveNewItinerary = () => {
         );
     }
 
-    console.log(newItinerary.value); // 入力したデータをコンソールに表示
-    addItinerary(newItinerary.value); // ストアに新しいしおりを追加
-    dialog.value = false; // ダイアログを閉じる
+    // 入力したデータをコンソールに表示
+    console.log(newItinerary.value);
+
+    // ストアに新しい旅行を追加
+    addItinerary(newItinerary.value);
+
+    // フォームをリセット
+    newItinerary.value = {
+        title: "",
+        startDate: "",
+        endDate: "",
+        people: "",
+        relationship: "",
+    };
+
+    // ダイアログを閉じる
+    dialog.value = false;
 };
 
 // 日付をフォーマットする関数

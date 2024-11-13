@@ -52,9 +52,9 @@
 
                     <!-- 日付選択 -->
                     <v-select
-                        :items="dateOptions"
+                        :items="days"
                         item-title="displayDate"
-                        item-value="date"
+                        item-value="date2"
                         label="日付を選択"
                         v-model="selectedDate"
                         variant="solo"
@@ -117,7 +117,12 @@
 <script setup>
 import { ref, onMounted, nextTick, defineEmits, watch } from "vue";
 import { usePlaceStore } from "@/stores/placeStore";
+import { useItineraryStore } from "@/stores/itineraryStore";
+import { useRoute } from "vue-router";
 /* global google */
+const route = useRoute();
+const id = route.params.itineraryId;
+const days = ref(useItineraryStore().generateDateList(id));
 
 const { savePlace } = usePlaceStore();
 const selected = ref(0); // 0: 地図から追加, 1: リストから追加
@@ -135,13 +140,6 @@ const key = ref(0);
 const reset = ref(null);
 const form = ref(false);
 const required = (v) => !!v || "必須";
-
-const dateOptions = [
-    { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
-    { label: "Day2", date: "2024-09-04", displayDate: "9/4 水" },
-    { label: "Day3", date: "2024-09-05", displayDate: "9/5 木" },
-    { label: "Day4", date: "2024-09-06", displayDate: "9/6 金" },
-];
 
 const searchBox = () => {
     const input = document.getElementById("search");
@@ -170,13 +168,16 @@ const searchBox = () => {
     });
 };
 
+// スポットを追加
 const addPlaceData = () => {
+    // データを整形
     placeData.value.memo = memo.value;
     placeData.value.datetime = `${selectedDate.value} ${time.value}:00`;
+    placeData.value.itinerary_id = id;
 
     // データを保存
     savePlace(placeData.value);
-    //console.log(placeData.value);
+    console.log(placeData.value);
 
     // データをリセット
     placeData.value = {};

@@ -12,7 +12,7 @@ const routes = [
         name: 'home'
     },
     {
-        path: '/schedule',
+        path: '/schedule/:itineraryId',
         component: SchedulePage,
         name: 'schedule',
         props: true

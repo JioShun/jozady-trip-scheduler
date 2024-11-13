@@ -13,8 +13,25 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { usePlaceStore } from "@/stores/placeStore";
+
+// コンポーネントのインポート
 import GoogleMap from "@/components/GoogleMap.vue";
 import SideBar from "@/components/SideBar.vue";
+
+// ストアのインポート
+const placeStore = usePlaceStore();
+
+// ルートパラメータからIDの取得
+const route = useRoute();
+const id = route.params.itineraryId;
+
+onMounted(() => {
+    // 行程表の取得
+    placeStore.fetchPlaces(id);
+});
 </script>
 
 <style scoped>

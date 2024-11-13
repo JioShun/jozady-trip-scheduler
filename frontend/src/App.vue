@@ -12,6 +12,7 @@
                 class="logo"
             />
             <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
+            <h2>{{ getTitle }}</h2>
         </v-app-bar>
 
         <!-- ナビゲーションドロワー -->
@@ -25,17 +26,31 @@
 </template>
 
 <script setup>
+// Vue関連のインポート
 import { onMounted, ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
+
+// コンポーネントのインポート
 import ScheduleNavigationDrawer from "./components/ScheduleNavigationDrawer.vue";
 import HomeNavigationDrawer from "./components/HomeNavigationDrawer.vue";
 
+// データの初期化
 const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
 const borderEnabled = ref(false);
 
+// ルートによってタイトルを表示
+import { useItineraryStore } from "./stores/itineraryStore";
+
+const getTitle = computed(() => {
+    const id = route.params.itineraryId;
+    const title = id ? useItineraryStore().getTitle(id) : null;
+    return title;
+});
+
+// 現在のルートに応じて表示するドロワーを切り替える
 const currentDrawer = computed(() => {
     if (route.name === "home") {
         return HomeNavigationDrawer;
@@ -45,6 +60,7 @@ const currentDrawer = computed(() => {
     return null;
 });
 
+// 枠線表示の切り替え（デバッグ用）
 const toggleBorder = () => {
     borderEnabled.value = !borderEnabled.value;
     document.querySelectorAll("*").forEach((el) => {
@@ -56,6 +72,7 @@ const toggleBorder = () => {
     });
 };
 
+// ドロワーの初期状態を設定
 onMounted(() => {
     if (mdAndUp.value) drawer.value = true;
     else drawer.value = false;

@@ -28,12 +28,15 @@
 <script setup>
 import { computed } from "vue";
 
+// コンポーネントのインポート
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
 
+// ストアからitinerariesを取得
 const itineraries = computed(() => useItineraryStore().itineraries);
 
+// 日付順に並び替えるメソッド
 const itinerariesSorted = computed(() => {
     return itineraries.value.slice().sort((a, b) => {
         return new Date(a.startDate) - new Date(b.startDate);
