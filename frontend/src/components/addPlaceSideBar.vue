@@ -141,13 +141,6 @@ const reset = ref(null);
 const form = ref(false);
 const required = (v) => !!v || "必須";
 
-// eslint-disable-next-line
-const dateOptions = [
-    { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
-    { label: "Day2", date: "2024-09-04", displayDate: "9/4 水" },
-    { label: "Day3", date: "2024-09-05", displayDate: "9/5 木" },
-];
-
 const searchBox = () => {
     const input = document.getElementById("search");
     const autocomplete = new google.maps.places.Autocomplete(input, {

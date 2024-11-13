@@ -99,7 +99,16 @@ export const useItineraryStore = defineStore('itinerary', {
             }
 
             return dateList;
-        }
+        },
 
+        // idを指定して，タイトルを取得するメソッド
+        getTitle(itineraryId) {
+            const itinerary = this.itineraries.find(it => it.itineraryId === parseInt(itineraryId));
+            if (!itinerary) {
+                console.error(`Itinerary with id ${itineraryId} not found`);
+                return '';
+            }
+            return itinerary.title;
+        }
     }
 });
