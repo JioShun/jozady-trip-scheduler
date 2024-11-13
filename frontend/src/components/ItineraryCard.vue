@@ -1,5 +1,11 @@
 <template>
-    <v-card width="220" elevation="6" rounded="lg" class="itinerary-card">
+    <v-card
+        width="220"
+        elevation="6"
+        rounded="lg"
+        class="itinerary-card"
+        @click="goToSchedule(props.itinerary.itineraryId)"
+    >
         <v-img
             class="item-img"
             height="200px"
@@ -42,8 +48,10 @@
 <script setup>
 import { ref, defineProps } from "vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
+import { useRouter } from "vue-router";
 
 const { removeItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
+const router = useRouter();
 
 // メニューのリスト
 const menus = ref([{ title: "削除" }, { title: "編集" }]);
@@ -65,6 +73,11 @@ const selectMenu = (menu) => {
     if (menu.title === "削除") {
         removeItinerary(props.itinerary.itineraryId);
     }
+};
+
+// 各旅程のスケジュールに移動するメソッド
+const goToSchedule = (itineraryId) => {
+    router.push({ name: "schedule", params: { itineraryId } });
 };
 </script>
 
