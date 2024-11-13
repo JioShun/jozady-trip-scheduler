@@ -2,13 +2,14 @@
     <div>
         <!-- 新規作成ボタン -->
         <v-btn
-            prepend-icon="add"
             variant="tonal"
-            size="large"
+            :size="smAndUp ? 'large' : 'default'"
             @click="dialog = true"
             rounded="pill"
+            :icon="!smAndUp"
         >
-            新規作成
+            <v-icon>add</v-icon>
+            <span v-if="smAndUp">新規作成</span>
         </v-btn>
 
         <!-- しおり作成ダイアログ -->
@@ -90,6 +91,8 @@
 import { ref } from "vue";
 import { VDateInput } from "vuetify/labs/VDateInput";
 import { useItineraryStore } from "@/stores/itineraryStore";
+import { useDisplay } from "vuetify";
+const { smAndUp } = useDisplay();
 
 const { addItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
 

@@ -28,9 +28,9 @@ const placeStore = usePlaceStore();
 const route = useRoute();
 const id = route.params.itineraryId;
 
-onMounted(() => {
+onMounted(async () => {
     // 行程表の取得
-    placeStore.fetchPlaces(id);
+    await placeStore.fetchPlaces(id);
 });
 </script>
 

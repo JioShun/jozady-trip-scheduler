@@ -24,7 +24,6 @@
             <!-- 地図から追加 -->
             <v-tabs-window-item class="sidebar-content">
                 <v-form
-                    :key="key"
                     ref="reset"
                     v-model="form"
                     @submit.prevent="
@@ -84,7 +83,7 @@
                             label="メモ"
                             variant="solo"
                             rounded="lg"
-                            rows="6"
+                            rows="4"
                             append-inner-icon="edit_note"
                         ></v-textarea>
                     </div>
@@ -136,7 +135,6 @@ const toggleAddPlaceSidebar = () => {
     emit("toggleAddPlaceSidebar");
 };
 
-const key = ref(0);
 const reset = ref(null);
 const form = ref(false);
 const required = (v) => !!v || "必須";
@@ -188,9 +186,6 @@ const addPlaceData = () => {
     // フォームをリセット
     reset.value.reset();
     reset.value.resetValidation();
-
-    // フォームのkeyを変更して再描画
-    key.value += 1; //timeの必須だけリセットされないのでkeyを変更して無理やり再描画
 };
 
 // 時間が変更されたときにメモを更新

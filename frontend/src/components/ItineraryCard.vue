@@ -4,6 +4,7 @@
         elevation="6"
         rounded="lg"
         class="itinerary-card"
+        :class="xs ? 'w-100' : ''"
         @click="goToSchedule(props.itinerary.itineraryId)"
     >
         <v-img
@@ -49,6 +50,8 @@
 import { ref, defineProps } from "vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
 import { useRouter } from "vue-router";
+import { useDisplay } from "vuetify";
+const { xs } = useDisplay();
 
 const { removeItinerary } = useItineraryStore(); // ストアから旅行のデータを取得
 const router = useRouter();
