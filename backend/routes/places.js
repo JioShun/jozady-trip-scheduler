@@ -61,10 +61,11 @@ const getPlacePhotoUrl = async (placeInfo) => {
 
 // GETリクエスト 
 // データベースからデータを取得してJSON形式で返す
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
     try {
         // Placeテーブルから全データを取得
-        con.query('SELECT * FROM Places', async (err, result, fields) => {
+        con.query(`SELECT * FROM Places WHERE itinerary_id = ?`, [id], async (err, result, fields) => {
             if (err) throw err;
 
             // すべてのplaceに対してphotoUrlを取得し、Promise.allで並列処理

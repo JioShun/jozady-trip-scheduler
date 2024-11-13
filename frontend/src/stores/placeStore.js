@@ -8,9 +8,9 @@ export const usePlaceStore = defineStore('place', {
     }),
     actions: {
         // バックエンドからデータを取得
-        async fetchPlaces() {
+        async fetchPlaces(itineraryId) {
             try {
-                const response = await fetch('/api/places');
+                const response = await fetch(`/api/places/${itineraryId}`);
                 if (response.ok) this.places = await response.json();
                 else console.error('Error fetching places:', response);
             } catch (error) {
