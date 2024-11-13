@@ -13,8 +13,20 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+
+// コンポーネントのインポート
 import GoogleMap from "@/components/GoogleMap.vue";
 import SideBar from "@/components/SideBar.vue";
+
+// ルートパラメータの取得
+const route = useRoute();
+
+// eslint-disable-next-line
+const id = route.params.id;
+
+onMounted(() => {});
 </script>
 
 <style scoped>

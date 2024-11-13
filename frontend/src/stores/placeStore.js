@@ -82,7 +82,5 @@ export const usePlaceStore = defineStore('place', {
                 console.error('Error saving place:', error);
             }
         },
-
-
     },
 });

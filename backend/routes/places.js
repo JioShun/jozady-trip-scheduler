@@ -22,8 +22,8 @@ const getPlaceInfo = async (placeId) => {
 const postPlace = async (placeInfo) => {
     return new Promise((resolve, reject) => {
         const query = `
-            INSERT INTO Places (name, formatted_address, location, place_id, memo, types, datetime, photo_reference) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO Places (name, formatted_address, location, place_id, memo, types, datetime, photo_reference, itinerary_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         //console.log(placeInfo);
@@ -36,7 +36,8 @@ const postPlace = async (placeInfo) => {
             placeInfo.memo,
             JSON.stringify(placeInfo.types),    // typesをJSON文字列として保存
             placeInfo.datetime,
-            placeInfo.photoReference
+            placeInfo.photoReference,
+            placeInfo.itinerary_id
         ];
 
         con.query(query, values, (err, result) => {
