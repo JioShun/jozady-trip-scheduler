@@ -97,8 +97,6 @@ const places = computed(() => usePlaceStore().places);
 import { useRoute } from "vue-router";
 const route = useRoute();
 const id = route.params.itineraryId;
-
-// eslint-disable-next-line
 const days = ref(useItineraryStore().generateDateList(id));
 
 const selectedDay = ref(0); // 選択された日付
@@ -125,7 +123,7 @@ const sortedPlaces = computed(() => {
 const filteredPlaces = computed(() => {
     return sortedPlaces.value.filter(
         (place) =>
-            place.datetime.split(" ")[0] === days.value[selectedDay.value].date
+            place.datetime.split(" ")[0] === days.value[selectedDay.value].date1
     );
 });
 </script>

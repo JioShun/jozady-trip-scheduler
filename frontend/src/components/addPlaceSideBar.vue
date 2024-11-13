@@ -52,9 +52,9 @@
 
                     <!-- 日付選択 -->
                     <v-select
-                        :items="dateOptions"
+                        :items="days"
                         item-title="displayDate"
-                        item-value="date"
+                        item-value="date2"
                         label="日付を選択"
                         v-model="selectedDate"
                         variant="solo"
@@ -117,10 +117,12 @@
 <script setup>
 import { ref, onMounted, nextTick, defineEmits, watch } from "vue";
 import { usePlaceStore } from "@/stores/placeStore";
+import { useItineraryStore } from "@/stores/itineraryStore";
 import { useRoute } from "vue-router";
 /* global google */
-
 const route = useRoute();
+const id = route.params.itineraryId;
+const days = ref(useItineraryStore().generateDateList(id));
 
 const { savePlace } = usePlaceStore();
 const selected = ref(0); // 0: 地図から追加, 1: リストから追加
@@ -134,14 +136,12 @@ const toggleAddPlaceSidebar = () => {
     emit("toggleAddPlaceSidebar");
 };
 
-// 現在のルートパラメータを取得
-const id = route.params.itineraryId;
-
 const key = ref(0);
 const reset = ref(null);
 const form = ref(false);
 const required = (v) => !!v || "必須";
 
+// eslint-disable-next-line
 const dateOptions = [
     { label: "Day1", date: "2024-09-03", displayDate: "9/3 火" },
     { label: "Day2", date: "2024-09-04", displayDate: "9/4 水" },

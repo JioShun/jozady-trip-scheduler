@@ -62,11 +62,18 @@ export const useItineraryStore = defineStore('itinerary', {
             let dayCounter = 1;
 
             // 日付のフォーマット関数
-            function formatDate(date) {
+            function formatDate1(date) {
                 const year = date.getFullYear();
                 const month = String(date.getMonth() + 1);
                 const day = String(date.getDate());
                 return `${year}/${month}/${day}`;
+            }
+
+            function formatDate2(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
             }
 
             // 曜日を取得する関数
@@ -77,12 +84,14 @@ export const useItineraryStore = defineStore('itinerary', {
 
             // startDateからendDateまでの日付を生成
             for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-                const formattedDate = formatDate(d);
+                const formattedDate1 = formatDate1(d);
+                const formattedDate2 = formatDate2(d);
                 const displayDate = `${d.getMonth() + 1}/${d.getDate()} ${getDayOfWeek(d)}`;
 
                 dateList.push({
                     name: `Day${dayCounter}`,
-                    date: formattedDate,         // "2024/9/5" のような形式
+                    date1: formattedDate1,         // "2024/9/5" のような形式
+                    date2: formattedDate2,        // "2024-09-05" のような形式
                     displayDate: displayDate      // "9/5 木" のような形式
                 });
 
