@@ -94,6 +94,12 @@ const goToSchedule = (itineraryId) => {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+@media screen and (max-width: 600px) {
+    .itinerary-card:hover {
+        transform: none;
+    }
+}
+
 .itinerary-card:hover {
     transform: scale(1.05);
 }
