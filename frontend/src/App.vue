@@ -2,6 +2,7 @@
     <v-app>
         <!-- ヘッダー -->
         <v-app-bar ref="a" elevation="0" density="comfortable" color="#e4e2dd">
+            <!-- メニュー表示切り替えボタン -->
             <v-app-bar-nav-icon
                 @click="drawer = !drawer"
                 v-if="!mdAndUp"
@@ -10,9 +11,13 @@
                 :src="require('@/assets/Jozady.png')"
                 alt="Jozady"
                 class="logo"
+                v-if="!(!mdAndUp && route.name == 'schedule')"
             />
-            <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
-            <h2>{{ getTitle }}</h2>
+            <!-- デバック用の枠線表示ボタン -->
+            <!-- <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn> -->
+
+            <!-- スケジュールのタイトル -->
+            <h3 class="scheduleTitle">{{ getTitle }}</h3>
         </v-app-bar>
 
         <!-- ナビゲーションドロワー -->
@@ -27,7 +32,7 @@
 
 <script setup>
 // Vue関連のインポート
-import { onMounted, ref, watch, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 
@@ -61,6 +66,7 @@ const currentDrawer = computed(() => {
 });
 
 // 枠線表示の切り替え（デバッグ用）
+// eslint-disable-next-line
 const toggleBorder = () => {
     borderEnabled.value = !borderEnabled.value;
     document.querySelectorAll("*").forEach((el) => {
@@ -77,8 +83,9 @@ onMounted(() => {
     if (mdAndUp.value) drawer.value = true;
     else drawer.value = false;
 });
-watch(mdAndUp, () => {
-    drawer.value = mdAndUp.value;
+watch(route, () => {
+    if (mdAndUp.value) drawer.value = true;
+    else drawer.value = false;
 });
 </script>
 
@@ -91,7 +98,7 @@ watch(mdAndUp, () => {
 
 #app {
     font-family: Vanir, Helvetica, Arial, sans-serif;
-    color: #2c3e50;
+    color: #2b3742;
     height: 100vh;
 }
 
@@ -105,11 +112,20 @@ watch(mdAndUp, () => {
     padding: 10px;
     font-size: 10px;
     gap: 10px;
+    position: relative;
 }
 
 .logo {
     padding-left: 10px;
     height: 100%;
     overflow: hidden;
+}
+
+.scheduleTitle {
+    color: #36506a;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap; /* テキストの折り返しを禁止 */
 }
 </style>

@@ -8,11 +8,11 @@
             </div>
 
             <div class="itineraries">
-                <v-container>
+                <v-container fluid>
                     <v-row justify="start">
                         <!-- 1つ目のカード -->
                         <v-col
-                            cols="auto"
+                            :cols="xs ? '12' : 'auto'"
                             v-for="itinerary in itinerariesSorted"
                             :key="itinerary.itineraryId"
                         >
@@ -32,6 +32,8 @@ import { computed } from "vue";
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
+import { useDisplay } from "vuetify";
+const { xs } = useDisplay();
 
 // ストアからitinerariesを取得
 const itineraries = computed(() => useItineraryStore().itineraries);

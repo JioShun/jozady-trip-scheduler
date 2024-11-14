@@ -3,10 +3,7 @@
         <!-- ヘッダー（番号・時間） -->
         <div class="item-header">
             <div class="circle-number">{{ props.index }}</div>
-            <span class="time"
-                >{{ props.element.datetime.split(" ")[0] }}
-                {{ formatTime(props.element.datetime) }}</span
-            >
+            <span class="time"> {{ formatTime(props.element.datetime) }}</span>
         </div>
 
         <!-- スポット情報（写真・名前・メニューバー） -->

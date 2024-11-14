@@ -25,11 +25,6 @@
         <!-- コンテンツ -->
         <div class="sidebar__content">
             <!-- スケジュール -->
-            <!-- <VueDraggable
-                v-model="filteredPlaces"
-                :animation="200"
-                ghostClass="ghost"
-            > -->
             <div
                 v-for="(element, index) in filteredPlaces"
                 :key="element.place_index"
@@ -56,6 +51,7 @@
                 elevation="6"
                 @click="toggleAddPlaceSidebar"
                 class="add-spot-btn"
+                v-if="!xs"
             >
                 スポット
             </v-btn>
@@ -67,7 +63,7 @@
         v-model="addPlaceSidebar"
         location="right"
         temporary
-        width="400"
+        width="350"
         :scrim="false"
         style="z-index: 1"
     >
@@ -90,6 +86,8 @@ import { usePlaceStore } from "@/stores/placeStore";
 import placeItem from "./PlaceItem.vue";
 import AddPlaceSideBar from "./AddPlaceSideBar.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
+import { useDisplay } from "vuetify";
+const { xs } = useDisplay();
 
 const { removePlace } = usePlaceStore();
 const places = computed(() => usePlaceStore().places);
@@ -136,6 +134,17 @@ const filteredPlaces = computed(() => {
     display: flex;
     flex-direction: column;
     position: relative;
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        width: 100% !important;
+        height: 100% !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
 }
 
 .add_place {
