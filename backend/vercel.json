@@ -1,14 +1,14 @@
 {
-    "version": 2,
-    "builds": [
+  "builds": [
       {
-        "src": "server.js",
-        "use": "@vercel/node"
+          "src": "*.js",
+          "use": "@vercel/node"
       }
-    ],
-    "routes": [
-      { "src": "/api/places/(.*)", "dest": "/api/places/$1" },
-      { "src": "/api/itineraries/(.*)", "dest": "/api/itineraries/$1" },
-      { "src": "/(.*)", "dest": "/" }
-    ]
-    }  
+  ],
+  "routes": [
+      {
+          "src": "/(.*)",
+          "dest": "/"
+      }
+  ]
+}
