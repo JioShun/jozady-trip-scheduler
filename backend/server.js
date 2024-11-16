@@ -12,13 +12,13 @@ const loggerMiddleware = function (req, res, next) {
 // ルーティングの設定
 const placesRouter = require('./routes/places');
 const itinerariesRouter = require('./routes/itineraries');
-const PORT = env3000;
+const PORT = process.env.PORT || 3000;
 
 // ミドルウェアの設定
 app.use(loggerMiddleware);
 app.use(express.json());
 app.use(express.static('public', { maxAge: 86400000 }));
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use('/api/places', placesRouter);
 app.use('/api/itineraries', itinerariesRouter);
 
