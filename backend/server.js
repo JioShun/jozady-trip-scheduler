@@ -12,7 +12,7 @@ const loggerMiddleware = function (req, res, next) {
 // ルーティングの設定
 const placesRouter = require('./routes/places');
 const itinerariesRouter = require('./routes/itineraries');
-const PORT = 3000;
+const PORT = env3000;
 
 // ミドルウェアの設定
 app.use(loggerMiddleware);
