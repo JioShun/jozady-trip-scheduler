@@ -4,7 +4,7 @@
 旅行のスケジュールを作成，閲覧ができる  
 何かwebアプリを作りたいと思って修士1年の時に作ったアプリ  
 [nicody](https://nicody.jp/mypage/library)を参考（ほぼそのまま）に作成  
-vercelでデプロイ
+vercelでデプロイ  
 ⚠️バグ・余計なUI多数あり
 
 ## 使い方
