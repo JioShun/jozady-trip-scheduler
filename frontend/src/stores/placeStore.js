@@ -1,6 +1,7 @@
 // stores/placeStore.js
 import { defineStore } from 'pinia';
 import { useMarkerStore } from './markerStore';
+const BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 export const usePlaceStore = defineStore('place', {
     state: () => ({
@@ -10,7 +11,7 @@ export const usePlaceStore = defineStore('place', {
         // バックエンドからデータを取得
         async fetchPlaces(itineraryId) {
             try {
-                const response = await fetch(`/api/places/${itineraryId}`);
+                const response = await fetch(`${BASE_URL}/api/places/${itineraryId}`);
                 if (response.ok) this.places = await response.json();
                 else console.error('Error fetching places:', response);
             } catch (error) {
@@ -21,7 +22,7 @@ export const usePlaceStore = defineStore('place', {
         // データをバックエンドに送信
         async postPlaces(place) {
             try {
-                const response = await fetch('/api/places', {
+                const response = await fetch(`${BASE_URL}/api/places`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(place),
@@ -38,7 +39,7 @@ export const usePlaceStore = defineStore('place', {
         // 指定した場所を削除する関数
         async removePlace(id) {
             try {
-                const response = await fetch(`/api/places/${id}`, { method: 'DELETE' });
+                const response = await fetch(`${BASE_URL}/api/places/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     useMarkerStore().removeMarker(id);
                     this.places = this.places.filter(p => p.id !== id);
@@ -51,7 +52,7 @@ export const usePlaceStore = defineStore('place', {
         // place_idを指定して場所情報を取得・保存する関数
         async handlePlace(placeId) {
             try {
-                const response = await fetch('/api/places/handlePlace', { // 
+                const response = await fetch(`${BASE_URL}/api/places/handlePlace`, { // 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ placeId }),
@@ -68,7 +69,7 @@ export const usePlaceStore = defineStore('place', {
         // placeDataを受け取ってplace情報を保存する関数
         async savePlace(placeData) {
             try {
-                const response = await fetch('/api/places/addPlace', {
+                const response = await fetch(`${BASE_URL}/api/places/addPlace`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(placeData),

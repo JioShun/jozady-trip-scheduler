@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+const BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 export const useItineraryStore = defineStore('itinerary', {
     state: () => ({
@@ -8,7 +9,7 @@ export const useItineraryStore = defineStore('itinerary', {
         // バックエンドからデータを取得するメソッド
         async fetchItineraries() {
             try {
-                const response = await fetch('/api/itineraries');
+                const response = await fetch(`${BASE_URL}/api/itineraries`);
                 if (response.ok) this.itineraries = await response.json();
                 else console.error('Error fetching itineraries:', response);
             } catch (error) {
@@ -19,7 +20,7 @@ export const useItineraryStore = defineStore('itinerary', {
         // しおりを追加するメソッド
         async addItinerary(itinerary) {
             try {
-                const response = await fetch('/api/itineraries', {
+                const response = await fetch(`${BASE_URL}/api/itineraries`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(itinerary)
@@ -36,7 +37,7 @@ export const useItineraryStore = defineStore('itinerary', {
         // しおりを削除するメソッド
         async removeItinerary(itineraryId) {
             try {
-                const response = await fetch(`/api/itineraries/${itineraryId}`, {
+                const response = await fetch(`${BASE_URL}/api/itineraries/${itineraryId}`, {
                     method: 'DELETE'
                 });
                 if (response.ok) {
