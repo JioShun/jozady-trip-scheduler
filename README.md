@@ -4,12 +4,10 @@
 旅行のスケジュールを作成，閲覧ができる  
 何かwebアプリを作りたいと思って修士1年の時に作ったアプリ  
 [nicody](https://nicody.jp/mypage/library)を参考（ほぼそのまま）に作成
+vercelでデプロイ
 
 ## 使い方
-### 起動
-1．mysqlサーバの起動  
-2．backendフォルダを`npm run dev`で実行  
-3．flontendフォルダを`npm run serve`で実行　　
+(https://jozady-trip-scheduler-jisd.vercel.app/)
 
 ### 操作
 1. **しおり一覧**で旅のしおりを作成（画面1）
@@ -23,9 +21,9 @@
 
 ## その他
 ### 開発言語など
-- mysql
-- express
-- Vue.js
+- GCP cloud mysql
+- node.js(Express.js)
+- JavaScript(Vue.js)
     - vuetify
     - pinia
 
