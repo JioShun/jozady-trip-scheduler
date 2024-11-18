@@ -7,7 +7,7 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000', // バックエンドサーバーのURL
+        target: 'https://jozady-trip-scheduler-bmrh-cf4g9xjie-jioshuns-projects.vercel.app', // バックエンドサーバーのURL
         changeOrigin: true
       }
     }
