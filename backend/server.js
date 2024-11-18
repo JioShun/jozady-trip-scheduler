@@ -1,7 +1,9 @@
-require('dotenv').config();
-const express = require('express');
+import 'dotenv/config'; // dotenvの設定
+import express from 'express'; // expressのインポート
+import cors from 'cors'; // corsのインポート
 const app = express();
-const cors = require('cors');
+
+
 
 // 時刻を出力するロギングミドルウェア
 const loggerMiddleware = function (req, res, next) {
@@ -10,8 +12,8 @@ const loggerMiddleware = function (req, res, next) {
 };
 
 // ルーティングの設定
-const placesRouter = require('./routes/places');
-const itinerariesRouter = require('./routes/itineraries');
+import placesRouter from './routes/places.js';
+import itinerariesRouter from './routes/itineraries.js';
 const PORT = process.env.PORT || 3000;
 
 // ミドルウェアの設定

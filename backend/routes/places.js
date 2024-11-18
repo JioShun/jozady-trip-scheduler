@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const con = require('../db');
-const axios = require('axios');
+import axios from 'axios';
+import con from '../db.js';
+
 const MAP_API_KEY = process.env.GOOGLE_MAP_API;
 
 // Google APIからプレース情報を取得する関数
@@ -22,7 +23,7 @@ const getPlaceInfo = async (placeId) => {
 const postPlace = async (placeInfo) => {
     return new Promise((resolve, reject) => {
         const query = `
-            INSERT INTO Places (name, formatted_address, location, place_id, memo, types, datetime, photo_reference, itinerary_id) 
+            INSERT INTO places (name, formatted_address, location, place_id, memo, types, datetime, photo_reference, itinerary_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
@@ -65,7 +66,7 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id;
     try {
         // Placeテーブルから全データを取得
-        con.query(`SELECT * FROM Places WHERE itinerary_id = ?`, [id], async (err, result, fields) => {
+        con.query(`SELECT * FROM places WHERE itinerary_id = ?`, [id], async (err, result, fields) => {
             if (err) throw err;
 
             // すべてのplaceに対してphotoUrlを取得し、Promise.allで並列処理
@@ -98,7 +99,7 @@ router.get('/:id', async (req, res) => {
 // DELETEリクエスト
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
-    const query = 'DELETE FROM Places WHERE id = ?';
+    const query = 'DELETE FROM places WHERE id = ?';
     con.query(query, [id], (err, result) => {
         if (err) {
             console.error('Error deleting from Place:', err);
@@ -121,7 +122,7 @@ router.post('/getPlaceInfo', async (req, res) => {
     }
 });
 
-// getPlaceInfoとpostPlacesを組み合わせる
+// getPlaceInfoとpostplacesを組み合わせる
 router.post('/handlePlace', async (req, res) => {
     const { placeId } = req.body; // リクエストボディからplaceIdを取得
     try {
@@ -134,7 +135,7 @@ router.post('/handlePlace', async (req, res) => {
         const datetime = null; // datetimeはnullで保存
         const newPlaceInfo = [name, formatted_address, location, place_id, memo, newTypes, datetime]; // place情報を作成
         await postPlace(newPlaceInfo); // データベースに新しいplaceを保存
-        con.query('SELECT * FROM Places ORDER BY id DESC LIMIT 1', async (err, result) => { // 最新のplaceを取得
+        con.query('SELECT * FROM places ORDER BY id DESC LIMIT 1', async (err, result) => { // 最新のplaceを取得
             if (err) throw err;
             result[0].photoUrl = await getPlacePhotoUrl(placeInfo); // photoUrlを追加
             res.json(result[0]); // 最新のplaceを返す
@@ -160,7 +161,7 @@ router.post('/addPlace', async (req, res) => {
         const photoReference = response.data.result.photos[0].photo_reference;
         placeData.photoReference = photoReference;
         const insertId = await postPlace(placeData);
-        con.query('SELECT * FROM Places WHERE id = ?', [insertId], async (err, result) => {
+        con.query('SELECT * FROM places WHERE id = ?', [insertId], async (err, result) => {
             if (err) {
                 console.error('Error retrieving inserted place:', err);
                 return res.status(500).send('Failed to retrieve inserted place data');
@@ -175,4 +176,5 @@ router.post('/addPlace', async (req, res) => {
     }
 });
 
-module.exports = router;
+
+export default router;

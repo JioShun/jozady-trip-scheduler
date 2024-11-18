@@ -1,6 +1,7 @@
-const express = require('express');
+
+import express from 'express';
 const router = express.Router();
-const con = require('../db');
+import con from '../db.js';
 
 // 全データの取得
 router.get('/', (req, res) => {
@@ -54,4 +55,5 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-module.exports = router;
+
+export default router;
