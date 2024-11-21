@@ -14,7 +14,10 @@
                 v-if="!(!mdAndUp && route.name == 'schedule')"
             />
             <!-- デバック用の枠線表示ボタン -->
-            <!-- <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn> -->
+            <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
+            <v-btn @click="isLogin = !isLogin" variant="outlined"
+                >ログイン状態切替</v-btn
+            >
 
             <!-- スケジュールのタイトル -->
             <h3 class="scheduleTitle">{{ getTitle }}</h3>
@@ -24,8 +27,13 @@
         <component :is="currentDrawer" v-model="drawer" />
 
         <!-- メインコンテンツ -->
-        <v-main>
-            <router-view />
+        <v-main class="main">
+            <router-view v-if="isLogin" />
+            <div class="login-btn">
+                <v-btn v-if="!isLogin" size="x-large" rounded="lg"
+                    >Googleでログイン</v-btn
+                >
+            </div>
         </v-main>
     </v-app>
 </template>
@@ -45,6 +53,7 @@ const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
 const borderEnabled = ref(false);
+const isLogin = ref(false);
 
 // ルートによってタイトルを表示
 import { useItineraryStore } from "./stores/itineraryStore";
@@ -127,5 +136,18 @@ watch(route, () => {
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap; /* テキストの折り返しを禁止 */
+}
+
+.main {
+    background-color: #f4f4f9;
+    height: 100%;
+    width: 100%;
+}
+
+.login-btn {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
