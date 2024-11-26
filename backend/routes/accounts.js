@@ -40,7 +40,14 @@ router.get("/callback", async (req, res) => {
 
         const user = userInfoResponse.data;
         // 必要に応じてユーザー情報をDBに保存（この例では省略）
-        res.json({ user });
+        // フロントエンドのページにリダイレクトし、ユーザー情報をクエリパラメータに含めて送信
+        res.redirect(
+            `http://localhost:8080/?name=${encodeURIComponent(
+                user.name
+            )}&email=${encodeURIComponent(user.email)}&picture=${encodeURIComponent(
+                user.picture
+            )}`
+        );
     } catch (error) {
         console.error("Error during login callback:", error);
         res.status(500).json({ error: "Failed to log in with Google" });

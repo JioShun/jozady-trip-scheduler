@@ -5,12 +5,17 @@ export const useUserStore = defineStore("user", {
         user: null, // ユーザー情報
     }),
     actions: {
-        setUser(userData) {
-            this.user = userData;
-        },
 
         loginUser() {
             window.location.href = `http://localhost:3000/api/accounts/login`;
-        }
+        },
+        initializeUserFromParams() {
+            const params = new URLSearchParams(window.location.search);
+            this.user = {
+                name: params.get("name"),
+                email: params.get("email"),
+                picture: params.get("picture"),
+            };
+        },
     },
 });
