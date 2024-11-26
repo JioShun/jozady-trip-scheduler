@@ -30,7 +30,11 @@
         <v-main class="main">
             <router-view v-if="isLogin" />
             <div class="login-btn">
-                <v-btn v-if="!isLogin" size="x-large" rounded="lg"
+                <v-btn
+                    v-if="!isLogin"
+                    size="x-large"
+                    rounded="lg"
+                    @click="userStore.loginUser()"
                     >Googleでログイン</v-btn
                 >
             </div>
@@ -43,6 +47,7 @@
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
+import { useUserStore } from "./stores/userStore";
 
 // コンポーネントのインポート
 import ScheduleNavigationDrawer from "./components/ScheduleNavigationDrawer.vue";
@@ -54,6 +59,7 @@ const { mdAndUp } = useDisplay();
 const drawer = ref(false);
 const borderEnabled = ref(false);
 const isLogin = ref(false);
+const userStore = useUserStore();
 
 // ルートによってタイトルを表示
 import { useItineraryStore } from "./stores/itineraryStore";
