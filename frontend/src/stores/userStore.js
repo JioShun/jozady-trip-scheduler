@@ -2,13 +2,24 @@ import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("user", {
     state: () => ({
-        user: null, // ユーザー情報
+        user: {
+            name: null,
+            email: null,
+            picture: null,
+        }, // ユーザー情報
     }),
     actions: {
-
-        loginUser() {
-            window.location.href = `http://localhost:3000/api/accounts/login`;
+        // ログイン状態を確認
+        isLogin() {
+            return this.user.name !== null;
         },
+
+        // ログイン処理
+        loginUser() {
+            window.location.href = `${process.env.VUE_APP_LOCAL_URL}/api/accounts/login`;
+        },
+
+        // ログイン情報の取得
         initializeUserFromParams() {
             const params = new URLSearchParams(window.location.search);
             this.user = {
@@ -17,5 +28,8 @@ export const useUserStore = defineStore("user", {
                 picture: params.get("picture"),
             };
         },
+
+        // ログアウト処理
+
     },
 });

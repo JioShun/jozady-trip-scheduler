@@ -6,6 +6,16 @@
         :temporary="!mdAndUp"
         :permanent="mdAndUp"
     >
+        <v-list>
+            <v-list-item
+                :prepend-avatar="user.picture"
+                :subtitle="user.email"
+                :title="user.name"
+            ></v-list-item>
+        </v-list>
+
+        <v-divider></v-divider>
+
         <v-list dense nav>
             <v-list-item
                 prepend-icon="list"
@@ -17,8 +27,12 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useDisplay } from "vuetify";
+import { useUserStore } from "../stores/userStore";
 const { mdAndUp } = useDisplay();
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 </script>
 
 <style scoped>

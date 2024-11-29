@@ -15,9 +15,7 @@
             />
             <!-- デバック用の枠線表示ボタン -->
             <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
-            <v-btn @click="isLogin = !isLogin" variant="outlined"
-                >ログイン状態切替</v-btn
-            >
+            <v-btn variant="outlined">ログアウト</v-btn>
 
             <!-- スケジュールのタイトル -->
             <h3 class="scheduleTitle">{{ getTitle }}</h3>
@@ -28,10 +26,9 @@
 
         <!-- メインコンテンツ -->
         <v-main class="main">
-            <router-view v-if="isLogin" />
-            <div class="login-btn">
+            <router-view v-if="userStore.isLogin()" />
+            <div class="login-btn" v-if="!userStore.isLogin()">
                 <v-btn
-                    v-if="!isLogin"
                     size="x-large"
                     rounded="lg"
                     @click="userStore.loginUser()"
@@ -58,7 +55,6 @@ const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
 const borderEnabled = ref(false);
-const isLogin = ref(false);
 const userStore = useUserStore();
 
 // ルートによってタイトルを表示

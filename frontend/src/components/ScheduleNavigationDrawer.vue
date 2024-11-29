@@ -8,9 +8,9 @@
     >
         <v-list>
             <v-list-item
-                prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-                subtitle="sandra_a88@gmailcom"
-                title="Sandra Adams"
+                :prepend-avatar="user.picture"
+                :subtitle="user.email"
+                :title="user.name"
             ></v-list-item>
         </v-list>
 
@@ -48,8 +48,12 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useDisplay } from "vuetify";
+import { useUserStore } from "../stores/userStore";
 const { mdAndUp } = useDisplay();
+const userStore = useUserStore();
+const user = computed(() => userStore.user);
 </script>
 
 <style scoped>
