@@ -15,27 +15,28 @@
             />
             <!-- デバック用の枠線表示ボタン -->
             <v-btn @click="toggleBorder" variant="outlined">枠線表示</v-btn>
-            <v-btn variant="outlined">ログアウト</v-btn>
 
             <!-- スケジュールのタイトル -->
             <h3 class="scheduleTitle">{{ getTitle }}</h3>
         </v-app-bar>
 
-        <!-- ナビゲーションドロワー -->
-        <component :is="currentDrawer" v-model="drawer" />
+        <!-- ログインボタン -->
+        <div class="login-btn" v-if="!userStore.isLogin()">
+            <v-btn size="x-large" rounded="lg" @click="userStore.loginUser()"
+                >Googleでログイン</v-btn
+            >
+        </div>
 
-        <!-- メインコンテンツ -->
-        <v-main class="main">
-            <router-view v-if="userStore.isLogin()" />
-            <div class="login-btn" v-if="!userStore.isLogin()">
-                <v-btn
-                    size="x-large"
-                    rounded="lg"
-                    @click="userStore.loginUser()"
-                    >Googleでログイン</v-btn
-                >
-            </div>
-        </v-main>
+        <!-- ログインしている場合の表示 -->
+        <div v-if="userStore.isLogin()" class="logged-in">
+            <!-- ナビゲーションドロワー -->
+            <component :is="currentDrawer" v-model="drawer" />
+
+            <!-- メインコンテンツ -->
+            <v-main class="main">
+                <router-view />
+            </v-main>
+        </div>
     </v-app>
 </template>
 
@@ -141,6 +142,11 @@ watch(route, () => {
     white-space: nowrap; /* テキストの折り返しを禁止 */
 }
 
+.logged-in {
+    display: flex;
+    height: 100%;
+}
+
 .main {
     background-color: #f4f4f9;
     height: 100%;
@@ -148,6 +154,7 @@ watch(route, () => {
 }
 
 .login-btn {
+    background-color: #e6e6ef;
     height: 100%;
     display: flex;
     justify-content: center;

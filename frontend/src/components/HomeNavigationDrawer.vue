@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
         app
-        width="200"
+        width="250"
         color="#fff"
         :temporary="!mdAndUp"
         :permanent="mdAndUp"
@@ -23,6 +23,16 @@
                 value="itineraries"
             ></v-list-item
         ></v-list>
+        <template v-slot:append>
+            <v-list-item
+                title="ログアウト"
+                prepend-icon="logout"
+                variant="plain"
+                style="margin-bottom: 30px"
+                @click="userStore.logoutUser()"
+            >
+            </v-list-item>
+        </template>
     </v-navigation-drawer>
 </template>
 

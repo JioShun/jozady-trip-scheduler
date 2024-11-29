@@ -29,7 +29,13 @@ export const useUserStore = defineStore("user", {
             };
         },
 
-        // ログアウト処理
-
+        // ログアウト処理（簡易版）
+        logoutUser() {
+            this.user = {
+                name: null,
+                email: null,
+                picture: null,
+            };
+        },
     },
 });
