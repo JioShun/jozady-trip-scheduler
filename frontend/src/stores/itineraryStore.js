@@ -6,10 +6,21 @@ export const useItineraryStore = defineStore('itinerary', {
         itineraries: []
     }),
     actions: {
-        // バックエンドからデータを取得するメソッド
+        // 全てのしおりデータを取得するメソッド
         async fetchItineraries() {
             try {
                 const response = await fetch(`${BASE_URL}/api/itineraries`);
+                if (response.ok) this.itineraries = await response.json();
+                else console.error('Error fetching itineraries:', response);
+            } catch (error) {
+                console.error('Error fetching itineraries:', error);
+            }
+        },
+
+        // ユーザに合ったしおりを取得するメソッド
+        async fetchItinerariesByUser(userEmail) {
+            try {
+                const response = await fetch(`${BASE_URL}/api/itineraries?userEmail=${userEmail}`);
                 if (response.ok) this.itineraries = await response.json();
                 else console.error('Error fetching itineraries:', response);
             } catch (error) {

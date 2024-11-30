@@ -20,7 +20,35 @@ router.get('/', (req, res) => {
                 startDate: itinerary.start_date,
                 endDate: itinerary.end_date,
                 people: itinerary.people,
-                relationship: itinerary.relationship
+                relationship: itinerary.relationship,
+                userEmail: itinerary.user_email
+            };
+        });
+
+        res.json(renameResult);
+    });
+});
+
+// ユーザに合ったしおりの取得
+router.get('/', (req, res) => {
+    const userEmail = req.query.userEmail;
+    const query = 'SELECT * FROM itineraries WHERE user_email = ?';
+    con.query(query, [userEmail], (err, result) => {
+        if (err) {
+            console.error('Error getting itineraries:', err);
+            res.status(500).send('Failed to get itineraries');
+            return;
+        }
+
+        const renameResult = result.map(itinerary => {
+            return {
+                itineraryId: itinerary.id,
+                title: itinerary.title,
+                startDate: itinerary.start_date,
+                endDate: itinerary.end_date,
+                people: itinerary.people,
+                relationship: itinerary.relationship,
+                userEmail: itinerary.user_email
             };
         });
 

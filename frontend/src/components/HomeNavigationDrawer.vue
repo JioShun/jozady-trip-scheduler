@@ -19,7 +19,7 @@
         <v-list dense nav>
             <v-list-item
                 prepend-icon="list"
-                title="しおり一覧"
+                title="旅のしおり一覧"
                 value="itineraries"
             ></v-list-item
         ></v-list>
