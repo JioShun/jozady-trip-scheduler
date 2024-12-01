@@ -32,8 +32,17 @@ import { computed } from "vue";
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
+// import { useUserStore } from "@/stores/userStore";
 import { useDisplay } from "vuetify";
+
 const { xs } = useDisplay();
+// const { user } = useUserStore();
+// const { fetchItinerariesByUser } = useItineraryStore();
+
+// 最初にユーザに合わせた旅行しおりを取得
+// (async () => {
+//     await fetchItinerariesByUser(user.value.userId);
+// })();
 
 // ストアからitinerariesを取得
 const itineraries = computed(() => useItineraryStore().itineraries);

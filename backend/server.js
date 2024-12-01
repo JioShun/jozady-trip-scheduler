@@ -1,5 +1,6 @@
 import 'dotenv/config'; // dotenvの設定
 import express from 'express'; // expressのインポート
+import session from 'express-session'; // express-sessionのインポート
 import cors from 'cors'; // corsのインポート
 const app = express();
 

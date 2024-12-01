@@ -94,7 +94,7 @@ const toggleBorder = () => {
 onMounted(() => {
     if (mdAndUp.value) drawer.value = true;
     else drawer.value = false;
-    userStore.initializeUserFromParams();
+    userStore.fetchUserInfo();
 });
 watch(route, () => {
     if (mdAndUp.value) drawer.value = true;

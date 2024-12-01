@@ -19,14 +19,11 @@ export const useUserStore = defineStore("user", {
             window.location.href = `${process.env.VUE_APP_LOCAL_URL}/api/accounts/login`;
         },
 
-        // ログイン情報の取得
-        initializeUserFromParams() {
-            const params = new URLSearchParams(window.location.search);
-            this.user = {
-                name: params.get("name"),
-                email: params.get("email"),
-                picture: params.get("picture"),
-            };
+        // ユーザ情報の取得
+        async fetchUserInfo() {
+            const response = await fetch(`${process.env.VUE_APP_LOCAL_URL}/api/accounts/user`);
+            const data = await response.json();
+            this.user = data;
         },
 
         // ログアウト処理（簡易版）
