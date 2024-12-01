@@ -37,10 +37,17 @@ import { useDisplay } from "vuetify";
 
 // データの初期化
 const { xs } = useDisplay();
+const itineraryStore = useItineraryStore();
 const userStore = useUserStore();
+const user = computed(() => userStore.user);
 
+// ユーザー情報としおり情報の取得
+(async () => {
+    await userStore.fetchUserInfo();
+    itineraryStore.fetchItinerariesByUser(user.value.email);
+})();
 // ストアからitinerariesを取得
-const itineraries = computed(() => useItineraryStore().itineraries);
+const itineraries = computed(() => itineraryStore.itineraries);
 
 // 日付順に並び替えるメソッド
 const itinerariesSorted = computed(() => {
@@ -49,9 +56,7 @@ const itinerariesSorted = computed(() => {
     });
 });
 
-onMounted(() => {
-    userStore.fetchUserInfo();
-});
+onMounted(() => {});
 </script>
 
 <style scoped>

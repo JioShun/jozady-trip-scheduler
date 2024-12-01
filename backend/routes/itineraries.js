@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 });
 
 // ユーザに合ったしおりの取得
-router.get('/', (req, res) => {
+router.get('/byUser', (req, res) => {
     const userEmail = req.query.userEmail;
     const query = 'SELECT * FROM itineraries WHERE user_email = ?';
     con.query(query, [userEmail], (err, result) => {

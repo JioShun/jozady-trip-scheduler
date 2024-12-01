@@ -20,7 +20,7 @@ export const useItineraryStore = defineStore('itinerary', {
         // ユーザに合ったしおりを取得するメソッド
         async fetchItinerariesByUser(userEmail) {
             try {
-                const response = await fetch(`${BASE_URL}/api/itineraries?userEmail=${userEmail}`);
+                const response = await fetch(`${BASE_URL}/api/itineraries/byUser?userEmail=${userEmail}`);
                 if (response.ok) this.itineraries = await response.json();
                 else console.error('Error fetching itineraries:', response);
             } catch (error) {

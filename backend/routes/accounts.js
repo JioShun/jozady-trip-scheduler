@@ -42,14 +42,12 @@ router.get("/callback", async (req, res) => {
 
         const user = userInfoResponse.data;
 
-        console.log(req.session);
         // セッションにユーザー情報を保存
         req.session.user = {
             name: user.name,
             email: user.email,
             picture: user.picture,
         };
-        console.log(req.session.user);
 
         // 必要に応じてユーザー情報をDBに保存
         res.redirect("http://localhost:8080/");
@@ -61,7 +59,7 @@ router.get("/callback", async (req, res) => {
 
 //  ユーザ情報を取得するAPI
 router.get("/user", (req, res) => {
-    console.log(req.session.user);
+    //console.log(req.session.user);
     if (req.session.user) {
         res.json(req.session.user); // セッションからユーザー情報を返す
     } else {
