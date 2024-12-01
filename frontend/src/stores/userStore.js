@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+const BASE_URL = process.env.VUE_APP_LOCAL_URL;
 
 export const useUserStore = defineStore("user", {
     state: () => ({
@@ -16,12 +17,12 @@ export const useUserStore = defineStore("user", {
 
         // ログイン処理
         loginUser() {
-            window.location.href = `${process.env.VUE_APP_LOCAL_URL}/api/accounts/login`;
+            window.location.href = `${BASE_URL}/api/accounts/login`;
         },
 
         // ユーザ情報の取得
         async fetchUserInfo() {
-            const response = await fetch(`${process.env.VUE_APP_LOCAL_URL}/api/accounts/user`, {
+            const response = await fetch(`${BASE_URL}/api/accounts/user`, {
                 credentials: "include",
             });
             const data = await response.json();
@@ -29,13 +30,20 @@ export const useUserStore = defineStore("user", {
             this.user = data;
         },
 
-        // ログアウト処理（簡易版）
-        logoutUser() {
-            this.user = {
-                name: null,
-                email: null,
-                picture: null,
-            };
+        // ログアウト処理
+        async logoutUser() {
+            const response = await fetch(`${BASE_URL}/api/accounts/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
+            if (response.ok) {
+                this.user = {
+                    name: null,
+                    email: null,
+                    picture: null,
+                };
+                window.location.href = "/login";
+            }
         },
     },
 });

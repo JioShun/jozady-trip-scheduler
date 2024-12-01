@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.static('public', { maxAge: 86400000 }));
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true,
+    credentials: true, // クッキーの送信を許可
 }));
 app.use(session({
     secret: process.env.SESSION_SECRET,

@@ -69,5 +69,17 @@ router.get("/user", (req, res) => {
     }
 });
 
+// ログアウト処理
+router.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('ログアウトエラー:', err);
+            return res.status(500).json({ error: 'Failed to log out' });
+        }
+        res.clearCookie('connect.sid'); // セッションIDクッキーを削除
+        res.json({ message: 'Logged out' });
+    });
+});
+
 
 export default router;

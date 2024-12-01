@@ -1,7 +1,7 @@
 // stores/placeStore.js
 import { defineStore } from 'pinia';
 import { useMarkerStore } from './markerStore';
-const BASE_URL = process.env.VUE_APP_API_BASE_URL;
+const BASE_URL = process.env.VUE_APP_LOCAL_URL;
 
 export const usePlaceStore = defineStore('place', {
     state: () => ({
