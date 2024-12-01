@@ -26,23 +26,18 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 // コンポーネントのインポート
 import NewItineraryDialog from "@/components/NewItineraryDialog.vue";
 import ItineraryCard from "@/components/ItineraryCard.vue";
 import { useItineraryStore } from "@/stores/itineraryStore";
-// import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/userStore";
 import { useDisplay } from "vuetify";
 
+// データの初期化
 const { xs } = useDisplay();
-// const { user } = useUserStore();
-// const { fetchItinerariesByUser } = useItineraryStore();
-
-// 最初にユーザに合わせた旅行しおりを取得
-// (async () => {
-//     await fetchItinerariesByUser(user.value.userId);
-// })();
+const userStore = useUserStore();
 
 // ストアからitinerariesを取得
 const itineraries = computed(() => useItineraryStore().itineraries);
@@ -52,6 +47,10 @@ const itinerariesSorted = computed(() => {
     return itineraries.value.slice().sort((a, b) => {
         return new Date(a.startDate) - new Date(b.startDate);
     });
+});
+
+onMounted(() => {
+    userStore.fetchUserInfo();
 });
 </script>
 

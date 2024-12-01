@@ -20,23 +20,13 @@
             <h3 class="scheduleTitle">{{ getTitle }}</h3>
         </v-app-bar>
 
-        <!-- ログインボタン -->
-        <div class="login-btn" v-if="!userStore.isLogin()">
-            <v-btn size="x-large" rounded="lg" @click="userStore.loginUser()"
-                >Googleでログイン</v-btn
-            >
-        </div>
+        <!-- ナビゲーションドロワー -->
+        <component :is="currentDrawer" v-model="drawer" />
 
-        <!-- ログインしている場合の表示 -->
-        <div v-if="userStore.isLogin()" class="logged-in">
-            <!-- ナビゲーションドロワー -->
-            <component :is="currentDrawer" v-model="drawer" />
-
-            <!-- メインコンテンツ -->
-            <v-main class="main">
-                <router-view />
-            </v-main>
-        </div>
+        <!-- メインコンテンツ -->
+        <v-main class="main">
+            <router-view />
+        </v-main>
     </v-app>
 </template>
 
@@ -45,7 +35,7 @@
 import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
-import { useUserStore } from "./stores/userStore";
+import { useItineraryStore } from "./stores/itineraryStore";
 
 // コンポーネントのインポート
 import ScheduleNavigationDrawer from "./components/ScheduleNavigationDrawer.vue";
@@ -56,10 +46,6 @@ const route = useRoute();
 const { mdAndUp } = useDisplay();
 const drawer = ref(false);
 const borderEnabled = ref(false);
-const userStore = useUserStore();
-
-// ルートによってタイトルを表示
-import { useItineraryStore } from "./stores/itineraryStore";
 
 const getTitle = computed(() => {
     const id = route.params.itineraryId;
@@ -78,7 +64,6 @@ const currentDrawer = computed(() => {
 });
 
 // 枠線表示の切り替え（デバッグ用）
-// eslint-disable-next-line
 const toggleBorder = () => {
     borderEnabled.value = !borderEnabled.value;
     document.querySelectorAll("*").forEach((el) => {
@@ -94,7 +79,6 @@ const toggleBorder = () => {
 onMounted(() => {
     if (mdAndUp.value) drawer.value = true;
     else drawer.value = false;
-    userStore.fetchUserInfo();
 });
 watch(route, () => {
     if (mdAndUp.value) drawer.value = true;
@@ -151,13 +135,5 @@ watch(route, () => {
     background-color: #f4f4f9;
     height: 100%;
     width: 100%;
-}
-
-.login-btn {
-    background-color: #e6e6ef;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 </style>

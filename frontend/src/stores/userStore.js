@@ -21,8 +21,11 @@ export const useUserStore = defineStore("user", {
 
         // ユーザ情報の取得
         async fetchUserInfo() {
-            const response = await fetch(`${process.env.VUE_APP_LOCAL_URL}/api/accounts/user`);
+            const response = await fetch(`${process.env.VUE_APP_LOCAL_URL}/api/accounts/user`, {
+                credentials: "include",
+            });
             const data = await response.json();
+            console.log(data);
             this.user = data;
         },
 

@@ -1,5 +1,4 @@
 import express from 'express';
-import session from 'express-session';
 import con from '../db.js';
 import { OAuth2Client } from 'google-auth-library'; // OAuth2Clientのインポート
 
@@ -8,16 +7,6 @@ const client = new OAuth2Client( // OAuth2Clientのインスタンスを生成
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
     process.env.REDIRECT_URI
-);
-
-// セッションの設定
-router.use(
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: true,
-        cookie: { secure: false },
-    })
 );
 
 // ログインURLの生成
@@ -53,15 +42,16 @@ router.get("/callback", async (req, res) => {
 
         const user = userInfoResponse.data;
 
+        console.log(req.session);
         // セッションにユーザー情報を保存
         req.session.user = {
             name: user.name,
             email: user.email,
             picture: user.picture,
         };
-
         console.log(req.session.user);
-        // 必要に応じてユーザー情報をDBに保存（この例では省略）
+
+        // 必要に応じてユーザー情報をDBに保存
         res.redirect("http://localhost:8080/");
     } catch (error) {
         console.error("Error during login callback:", error);
@@ -71,6 +61,7 @@ router.get("/callback", async (req, res) => {
 
 //  ユーザ情報を取得するAPI
 router.get("/user", (req, res) => {
+    console.log(req.session.user);
     if (req.session.user) {
         res.json(req.session.user); // セッションからユーザー情報を返す
     } else {
