@@ -3,6 +3,8 @@ const router = express.Router();
 import axios from 'axios';
 import con from '../db.js';
 
+// テストだよ
+
 const MAP_API_KEY = process.env.GOOGLE_MAP_API;
 
 // Google APIからプレース情報を取得する関数
