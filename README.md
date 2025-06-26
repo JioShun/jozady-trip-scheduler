@@ -9,6 +9,7 @@ vercelでデプロイ
 ⚠️バグ・余計なUI多数あり
 
 ## 使い方
+諸事情でサーバを停止しているため，動作の確認ができません．
 (https://jozady-trip-scheduler-jisd.vercel.app/)
 
 ### 操作
